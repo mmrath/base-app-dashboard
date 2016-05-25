@@ -1,0 +1,87 @@
+<div *ngIf="(signupInfo | async)?.success" class="row">
+  <div class="col-xs-12">
+    <h2>Signup successful!</h2>
+    <p>Please check your inbox for activation email. You will need to activate your account before login.</p>
+  </div>
+</div>
+
+<form role="form" [ngFormModel]="signupForm" (ngSubmit)="signup()">
+  <div *ngIf="!((signupInfo | async)?.success)">
+    <div class="row center-xs">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-3">
+        <div class="row start-xs col-xs-12">
+          <h2 class="form-control">Sign up for a new account</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="row center-xs">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-3">
+        <div class="row">
+          <div class="col-xs-6">
+            <md-input class="form-control" placeholder="First name" ngControl="firstName">
+              <md-hint *ngIf="firstName.hasError('required') && firstName.touched">
+                <i>Required *</i>
+              </md-hint>
+              <md-hint *ngIf="(signupInfo | async)?.error">
+                <i>{{ (signupInfo | async)?.error | fieldError:'firstName' }}</i>
+              </md-hint>
+            </md-input>
+          </div>
+          <div class="col-xs-6">
+            <md-input class="form-control" placeholder="Last name" ngControl="lastName">
+              <md-hint *ngIf="lastName.hasError('required') && lastName.touched">
+                <i>Required *</i>
+              </md-hint>
+              <md-hint *ngIf="(signupInfo | async)?.error">
+                <i>{{ (signupInfo | async)?.error | fieldError:'lastName' }}</i>
+              </md-hint>
+            </md-input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row center-xs">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-3">
+        <md-input class="form-control" placeholder="Email" type="email" ngControl="email">
+          <md-hint *ngIf="email.hasError('required') && email.touched">
+            <i>Required *</i>
+          </md-hint>
+          <md-hint *ngIf="email.hasError('pattern') && email.touched">
+            <i>A valid email address is required</i>
+          </md-hint>
+          <md-hint *ngIf="(signupInfo | async)?.error">
+            <i>{{ (signupInfo | async)?.error | fieldError:'email' }}</i>
+          </md-hint>
+        </md-input>
+      </div>
+    </div>
+    <div class="row center-xs">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-3">
+        <md-input class="form-control" placeholder="Password" type="password" ngControl="password">
+          <md-hint *ngIf="password.hasError('required') && password.touched">
+            <i>Required *</i>
+          </md-hint>
+          <md-hint *ngIf="password.hasError('minlength') && password.touched">
+            <i>Password must be at least 8 characters</i>
+          </md-hint>
+          <md-hint *ngIf="(signupInfo | async)?.error">
+            <i>{{ (signupInfo | async)?.error | fieldError:'password' }}</i>
+          </md-hint>
+        </md-input>
+      </div>
+    </div>
+
+    <div class="row center-xs">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-3">
+        <div class="row start-xs">
+          <div class="col-xs">
+            <button md-raised-button [ngClass]="{'disabled' : !signupForm.valid }" color="accent">SIGN UP</button>
+            <a md-button [routerLink]="['/Login']">LOGIN</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,18 @@
+@import 'node_modules/normalize.css/normalize.css';
+@import '_grid';
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif !important;
+  height: 100%;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}

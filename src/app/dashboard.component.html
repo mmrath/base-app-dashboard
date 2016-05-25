@@ -1,3 +1,28 @@
-<h1>
-  {{title}}
-</h1>
+<md-sidenav-layout fullscreen>
+  <md-sidenav #sidenav mode="push" class="app-sidenav">
+    <md-toolbar [routerLink]="['/Home']">
+      <h3>Material</h3>
+    </md-toolbar>
+    <md-list>
+      <md-list-item md-ink [class.md-active]="false">
+        Demo
+      </md-list-item>
+      <md-list-item md-ink [class.md-active]="false">
+        <a [routerLink]="['/Signup']">Signup</a>
+      </md-list-item>
+    </md-list>
+  </md-sidenav>
+  <md-content #content>
+    <md-toolbar color="primary" class="fixed-toolbar">
+      <button class="app-hamburger-button" (click)="sidenav.toggle()">
+        <i class="material-icons app-toolbar-menu">menu</i>
+      </button>
+      <span breakAction="hide">Angular2 Material</span>
+      <span class="app-toolbar-filler"></span>
+
+    </md-toolbar>
+    <div class="container-fluid app-main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </md-content>
+</md-sidenav-layout>
