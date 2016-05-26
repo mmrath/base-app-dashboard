@@ -2,6 +2,7 @@ import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {Component} from '@angular/core';
 import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
 import {MdToolbar} from '@angular2-material/toolbar';
+import { RoleRootComponent } from './role';
 
 import {HomeComponent} from './home/index';
 import {SignupComponent, LoginComponent} from './user-account/index';
@@ -11,12 +12,14 @@ import {SignupComponent, LoginComponent} from './user-account/index';
   selector: 'dashboard-app',
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css'],
-  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar]
+  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar],
 })
 @RouteConfig([
   {path: '/', component: HomeComponent, name: 'Home'},
   {path: '/signup', component: SignupComponent, name: 'Signup'},
-  {path: '/login', component: LoginComponent, name: 'Login'}
+  { path: '/login', component: LoginComponent, name: 'Login' },
+  { path: '/role/...', component: RoleRootComponent, name: 'Role' },
+
 ])
 export class DashboardAppComponent {
 }
