@@ -11,12 +11,7 @@ License: MIT
 */
 
 import {Inject} from '@angular/core';
-import {
-  Http, Headers as AngularHeaders,
-  Request, RequestOptions, RequestMethod as RequestMethods,
-  Response,
-  URLSearchParams
-} from '@angular/http';
+import {Http, Headers as AngularHeaders, Request, RequestOptions, RequestMethod as RequestMethods, Response, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 
 /*
@@ -26,17 +21,11 @@ import {Observable} from 'rxjs/Observable';
 * @constructor
 */
 export class RestClient {
+  public constructor(@Inject(Http) protected http: Http) {}
 
-  public constructor( @Inject(Http) protected http: Http) {
-  }
+  protected getBaseUrl(): string { return null; };
 
-  protected getBaseUrl(): string {
-    return null;
-  };
-
-  protected getDefaultHeaders(): Object {
-    return null;
-  };
+  protected getDefaultHeaders(): Object { return null; };
 
   /**
    * Request Interceptor
@@ -55,10 +44,7 @@ export class RestClient {
    * @param {Response} res - response object
    * @returns {Response} res - transformed response object
    */
-  protected responseInterceptor(res: Observable<any>): Observable<any> {
-    return res;
-  }
-
+  protected responseInterceptor(res: Observable<any>): Observable<any> { return res; }
 }
 
 /**
@@ -66,10 +52,8 @@ export class RestClient {
  * @param {String} url - base URL
  */
 export function BaseUrl(url: string) {
-  return function <TFunction extends Function>(Target: TFunction): TFunction {
-    Target.prototype.getBaseUrl = function () {
-      return url;
-    };
+  return function<TFunction extends Function>(Target: TFunction): TFunction {
+    Target.prototype.getBaseUrl = function() { return url; };
     return Target;
   };
 }
@@ -79,22 +63,17 @@ export function BaseUrl(url: string) {
  * @param {Object} headers - deafult headers in a key-value pair
  */
 export function DefaultHeaders(headers: any) {
-  return function <TFunction extends Function>(Target: TFunction): TFunction {
-    Target.prototype.getDefaultHeaders = function () {
-      return headers;
-    };
+  return function<TFunction extends Function>(Target: TFunction): TFunction {
+    Target.prototype.getDefaultHeaders = function() { return headers; };
     return Target;
   };
 }
 
 function paramBuilder(paramName: string) {
-  return function (key: string) {
-    return function (target: RestClient, propertyKey: string | symbol, parameterIndex: number) {
+  return function(key: string) {
+    return function(target: RestClient, propertyKey: string|symbol, parameterIndex: number) {
       let metadataKey = `${propertyKey}_${paramName}_parameters`;
-      let paramObj: any = {
-        key: key,
-        parameterIndex: parameterIndex
-      };
+      let paramObj: any = {key: key, parameterIndex: parameterIndex};
       if (Array.isArray(target[metadataKey])) {
         target[metadataKey].push(paramObj);
       } else {
@@ -138,7 +117,7 @@ export var Header = paramBuilder('Header');
  * @param {Object} headersDef - custom headers in a key-value pair
  */
 export function Headers(headersDef: any) {
-  return function (target: RestClient, propertyKey: string, descriptor: any) {
+  return function(target: RestClient, propertyKey: string, descriptor: any) {
     descriptor.headers = headersDef;
     return descriptor;
   };
@@ -150,7 +129,7 @@ export function Headers(headersDef: any) {
  * @param MediaType producesDef - mediaType to be parsed
  */
 export function Produces(producesDef: MediaType) {
-  return function (target: RestClient, propertyKey: string, descriptor: any) {
+  return function(target: RestClient, propertyKey: string, descriptor: any) {
     descriptor.mediaType = producesDef;
     return descriptor;
   };
@@ -162,13 +141,13 @@ export function Produces(producesDef: MediaType) {
  */
 export enum MediaType {
   JSON,
-  RAW // No transalation
+  RAW  // No transalation
 }
 
 
 function methodBuilder(method: number) {
-  return function (url?: string) {
-    return function (target: RestClient, propertyKey: string, descriptor: any) {
+  return function(url?: string) {
+    return function(target: RestClient, propertyKey: string, descriptor: any) {
 
       let pUrl = target[`${propertyKey}_Url_parameters`];
       let pPath = target[`${propertyKey}_Path_parameters`];
@@ -176,7 +155,7 @@ function methodBuilder(method: number) {
       let pBody = target[`${propertyKey}_Body_parameters`];
       let pHeader = target[`${propertyKey}_Header_parameters`];
 
-      descriptor.value = function (...args: any[]) {
+      descriptor.value = function(...args: any[]) {
 
 
         // Body
@@ -202,26 +181,27 @@ function methodBuilder(method: number) {
         let search = new URLSearchParams();
         if (pQuery) {
           pQuery
-            .filter(p => args[p.parameterIndex]) // filter out optional parameters
-            .forEach(p => {
-              let key = p.key;
-              let value = args[p.parameterIndex];
-              if (Array.isArray(value)) {
-                let valueArr = value as Array<any>;
-                valueArr.forEach(obj => {
-                  let arrParamValue = obj;
-                  if (obj instanceof Object) {
-                    arrParamValue = JSON.stringify(obj);
-                  }
-                  search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
-                });
-              } else if (value instanceof Object) { // if the value is a instance of Object, we stringify it
-                value = JSON.stringify(value);
-                search.set(encodeURIComponent(key), encodeURIComponent(value));
-              } else {
-                search.set(encodeURIComponent(key), encodeURIComponent(value));
-              }
-            });
+              .filter(p => args[p.parameterIndex])  // filter out optional parameters
+              .forEach(p => {
+                let key = p.key;
+                let value = args[p.parameterIndex];
+                if (Array.isArray(value)) {
+                  let valueArr = value as Array<any>;
+                  valueArr.forEach(obj => {
+                    let arrParamValue = obj;
+                    if (obj instanceof Object) {
+                      arrParamValue = JSON.stringify(obj);
+                    }
+                    search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
+                  });
+                } else if (value instanceof Object) {  // if the value is a instance of Object, we
+                                                       // stringify it
+                  value = JSON.stringify(value);
+                  search.set(encodeURIComponent(key), encodeURIComponent(value));
+                } else {
+                  search.set(encodeURIComponent(key), encodeURIComponent(value));
+                }
+              });
         }
 
         // Headers
@@ -249,13 +229,7 @@ function methodBuilder(method: number) {
           overrideUrl = this.getBaseUrl() + resUrl;
         }
         // Request options
-        let options = new RequestOptions({
-          method,
-          url: overrideUrl,
-          headers,
-          body,
-          search
-        });
+        let options = new RequestOptions({method, url: overrideUrl, headers, body, search});
 
         let req = new Request(options);
 
@@ -265,8 +239,8 @@ function methodBuilder(method: number) {
         let observable: Observable<Response> = this.http.request(req);
 
         // transform the obserable in accordance to the @Produces decorator
-        if (typeof descriptor.mediaType === 'undefined'
-          || descriptor.mediaType === MediaType.JSON) {
+        if (typeof descriptor.mediaType === 'undefined' ||
+            descriptor.mediaType === MediaType.JSON) {
           observable = observable.map(res => res.json());
         }
 

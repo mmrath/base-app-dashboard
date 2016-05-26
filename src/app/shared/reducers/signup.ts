@@ -1,4 +1,4 @@
-import { Action, Reducer } from '@ngrx/store';
+import {Action, Reducer} from '@ngrx/store';
 
 export const SIGNUP_IN_PROGRESS = 'SIGNUP_IN_PROGRESS';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
@@ -13,18 +13,20 @@ let initialState: any = {
   success: false,
 };
 
-export const signup: Reducer<any> = (state = initialState, action: Action = { type: INIT }) => {
+export const signup: Reducer<any> = (state = initialState, action: Action = {
+  type: INIT
+}) => {
 
   switch (action.type) {
     case SIGNUP_IN_PROGRESS:
-      return Object.assign({}, state,
-        { inProgress: true, success: false, error: null });
+      return Object.assign({}, state, {inProgress: true, success: false, error: null});
 
     case SIGNUP_SUCCESS:
-      return Object.assign({}, { inProgress: false, success: true, error: null });
+      return Object.assign({}, {inProgress: false, success: true, error: null});
 
     case SIGNUP_FAILURE:
-      return Object.assign({}, state, { error: action.payload.error, inProgress: false, success: false });
+      return Object.assign(
+          {}, state, {error: action.payload.error, inProgress: false, success: false});
 
     case SIGNUP_START:
       return Object.assign({}, initialState);

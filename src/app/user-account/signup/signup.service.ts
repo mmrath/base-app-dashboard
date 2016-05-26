@@ -9,27 +9,19 @@ import {JSON_HEADERS} from '../../shared/constants/headers';
 
 @Injectable()
 export class SignupService {
-
-  constructor(private http: Http, private store: Store<any>) {
-  }
+  constructor(private http: Http, private store: Store<any>) {}
 
   signup(item: any): void {
     this.store.dispatch({type: SIGNUP_IN_PROGRESS});
     this.http.post(SIGNUP_API, JSON.stringify(item), JSON_HEADERS)
-      .subscribe(
-        action => this.store.dispatch({ type: SIGNUP_SUCCESS}),
-        err => {
+        .subscribe(action => this.store.dispatch({type: SIGNUP_SUCCESS}), err => {
           let errorBody = undefined;
-          if ( typeof err._body !== 'undefined' ) {
+          if (typeof err._body !== 'undefined') {
             errorBody = JSON.parse(err._body);
           }
-          this.store.dispatch({type: SIGNUP_FAILURE, payload:{ error: errorBody}});
-        }
-        );
+          this.store.dispatch({type: SIGNUP_FAILURE, payload: {error: errorBody}});
+        });
   }
 
-  signupStart() {
-    this.store.dispatch({type: SIGNUP_START});
-  }
-
+  signupStart() { this.store.dispatch({type: SIGNUP_START}); }
 }

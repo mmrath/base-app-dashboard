@@ -1,15 +1,9 @@
 export class AuthService {
+  doLogin(username: string, password: string, rememberMe?: boolean) {}
 
-  doLogin(username: string, password: string, rememberMe?: boolean) {
-  }
+  doOAuthLogin() {}
 
-  doOAuthLogin() {
-  }
+  doLogout() {}
 
-  doLogout() {
-  }
-
-  isAuthenticated(): boolean {
-    return true;
-  }
+  isAuthenticated(): boolean { return true; }
 }
