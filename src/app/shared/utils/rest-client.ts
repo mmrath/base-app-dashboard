@@ -11,8 +11,15 @@ License: MIT
 */
 
 import {Inject} from '@angular/core';
-import {Http, Headers as AngularHeaders, Request, RequestOptions, RequestMethod as RequestMethods, Response, URLSearchParams} from '@angular/http';
+import {
+  Http, Headers as AngularHeaders,
+  Request, RequestOptions,
+  RequestMethod as RequestMethods,
+  Response, URLSearchParams
+} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
 
 /*
 * Angular 2 RestClient class.

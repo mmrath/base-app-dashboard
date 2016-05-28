@@ -3,7 +3,9 @@ import {Http} from '@angular/http';
 import {Store} from '@ngrx/store';
 
 import {SIGNUP_API} from '../../shared/constants/api';
-import {SIGNUP_IN_PROGRESS, SIGNUP_SUCCESS, SIGNUP_FAILURE, SIGNUP_START} from '../../shared/reducers/signup';
+import {
+  SIGNUP_IN_PROGRESS, SIGNUP_SUCCESS, SIGNUP_FAILURE, SIGNUP_START
+} from '../../shared/reducers/user-account/actions';
 import {JSON_HEADERS} from '../../shared/constants/headers';
 
 

@@ -1,9 +1,6 @@
-import {Action, Reducer} from '@ngrx/store';
+import {Action, ActionReducer} from '@ngrx/store';
 
-export const SIGNUP_IN_PROGRESS = 'SIGNUP_IN_PROGRESS';
-export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
-export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
-export const SIGNUP_START = 'SIGNUP_START';
+import {SIGNUP_IN_PROGRESS, SIGNUP_SUCCESS, SIGNUP_FAILURE, SIGNUP_START} from './actions';
 
 export const INIT = 'INIT';
 
@@ -13,7 +10,7 @@ let initialState: any = {
   success: false,
 };
 
-export const signup: Reducer<any> = (state = initialState, action: Action = {
+export const signupReducer: ActionReducer<any> = (state = initialState, action: Action = {
   type: INIT
 }) => {
 

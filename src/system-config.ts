@@ -39,7 +39,7 @@ const barrels: string[] = [
   '@angular/router-deprecated', '@angular/platform-browser', '@angular/platform-browser-dynamic',
 
   // Thirdparty barrels.
-  'rxjs', 'ng2-material', '@ngrx/store',
+  'rxjs', 'ng2-material', '@ngrx/core', '@ngrx/store',
 
   // App specific barrels.
   'app', 'app/shared', 'app/user-account/signup', 'app/home',

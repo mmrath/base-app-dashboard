@@ -3,21 +3,19 @@
     <md-toolbar [routerLink]="['/Home']">
       <h3>Material</h3>
     </md-toolbar>
-    <md-list>
-      <md-list-item md-ink [class.md-active]="false">
-        Demo
-      </md-list-item>
-      <md-list-item md-ink [class.md-active]="false">
-        <a [routerLink]="['/Signup']">Signup</a>
-      </md-list-item>
-    </md-list>
+
+    <md-nav-list>
+      <a md-list-item [routerLink]="['/Signup']">Button</a>
+      <a md-list-item>Card</a>
+      <a md-list-item>Checkbox</a>
+    </md-nav-list>
   </md-sidenav>
   <md-content #content>
     <md-toolbar color="primary" class="fixed-toolbar">
       <button class="app-hamburger-button" (click)="sidenav.toggle()">
         <i class="material-icons app-toolbar-menu">menu</i>
       </button>
-      <span breakAction="hide">Angular2 Material</span>
+      <span breakAction="hide">My Application</span>
       <span class="app-toolbar-filler"></span>
 
     </md-toolbar>

@@ -6,7 +6,7 @@ import {LOGIN_API} from '../../shared/constants/api';
 import {JSON_HEADERS} from '../../shared/constants/headers';
 import {
   LOGIN_IN_PROGRESS, LOGIN_SUCCCESS, LOGIN_FAILURE, LOGIN_START
-} from '../../shared/reducers/auth';
+} from '../../shared/reducers/user-account/actions';
 
 @Injectable()
 export class LoginService {
