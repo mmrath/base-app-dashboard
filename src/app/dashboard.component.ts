@@ -3,6 +3,7 @@ import {Component} from '@angular/core';
 import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
 import {MdToolbar} from '@angular2-material/toolbar';
 import { RoleRootComponent } from './role';
+import { UserComponent } from './user';
 
 import {HomeComponent} from './home/index';
 import {SignupComponent, LoginComponent} from './user-account/index';
@@ -19,7 +20,7 @@ import {SignupComponent, LoginComponent} from './user-account/index';
   {path: '/signup', component: SignupComponent, name: 'Signup'},
   { path: '/login', component: LoginComponent, name: 'Login' },
   { path: '/role/...', component: RoleRootComponent, name: 'Role' },
-
+  { path:  '/user', component: UserComponent, name: 'Name'}
 ])
 export class DashboardAppComponent {
 }

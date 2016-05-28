@@ -6,7 +6,7 @@
     </div>
   <form role="form" [ngFormModel]="loginForm"  (submit)="login($event)">
 
-    <div class="row center-xs">
+      <div class="row center-xs">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
         <md-input class="form-control" placeholder="Username" type="text" ngControl="username">
           <md-hint *ngIf="username.hasError('required') && username.touched">
@@ -36,7 +36,7 @@
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
         <div class="w-100 start-xs">
           <button md-raised-button [ngClass]="{'disabled' : !loginForm.valid }" color="accent">LOGIN</button>
-          <a md-button [routerLink]="['/Signup']">SIGN UP</a>
+          <button md-button [routerLink]="['/Signup']">SIGN UP</button>
         </div>
       </div>
     </div>

@@ -1,66 +1,81 @@
-<form class="form-horizontal" (ngSubmit)="onSubmit()" #roleForm="ngForm">
+<form (ngSubmit)="onSubmit()" [ngFormModel]="roleForm">
   <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12 form-group m-b-0">
-      <h3 [ngSwitch]="isNew">
+    <div class="col-sm-12 m-b-1">
+      <h2 [ngSwitch]="isNew">
         <template [ngSwitchWhen]="true">New Role</template>
         <template ngSwitchDefault>Edit Role</template>
-      </h3>
-      <div class="col-sm-12 form-group" *ngIf="errorMessages">
-         <div *ngFor="let message of errorMessages">
-           {{message}}
-         </div>
+      </h2>
+    </div>
+    <div class="col-sm-12" *ngIf="errorMessages">
+      <div *ngFor="let message of errorMessages">
+        {{message}}
       </div>
-      <div class="row form-group">
-        <label [attr.for]="name" class="col-sm-4 col-lg-2 form-control-label text-sm-right">Name</label>
-        <div class="col-sm-4 col-lg-3">
-          <template [ngIf]="!isNew">
-            <input type="hidden" class="form-control" [(ngModel)]="role.id" ngControl="id" #name="ngForm" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-2">
+      <template [ngIf]="!isNew">
+            <input type="hidden" class="form-control" [(ngModel)]="role.id" />
+            <input type="hidden" class="form-control" [(ngModel)]="role.version" />
           </template>
-          <input type="text" class="form-control" [(ngModel)]="role.name" [attr.id]="name" ngControl="name" #name="ngForm" [attr.placeholder]="'Role name'" />
-        </div>
-      </div>
-      <div class="row form-group">
-        <label [attr.for]="description" class="col-sm-3 col-lg-2 form-control-label text-sm-right">Description</label>
-        <div class="col-sm-4 col-lg-3">
-          <input type="text" class="form-control" [(ngModel)]="role.description" [attr.id]="description" [attr.placeholder]="'Description'" ngControl="description" #name="ngForm" />
-        </div>
-      </div>
+      <md-input class="form-control" placeholder="Role Name" [(ngModel)]="role.name" ngControl="name">
+        <md-hint *ngIf="name.hasError('required') && name.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(loginInfo | async)?.error">
+          <i>{{ (loginInfo | async)?.error | fieldError:'name' }}</i>
+        </md-hint>
+      </md-input>
     </div>
   </div>
-  <div class="row m-b-1">
-    <label [attr.for]="description" class="col-sm-3 col-lg-2 form-control-label text-sm-right">Permissions</label>
-    <div class="col-sm-8 col-lg-10">
-        <table class="data-table table-hover table-sm">
-          <thead class="thead-default">
-
-            <tr>
-              <th rowspan="2">Resource</th>
-              <th *ngFor="let accessLevel of accessLevels">
-                {{accessLevel}}
-              </th>
-            </tr>
-            <tr>
-              <th *ngFor="let accessLevel of accessLevels" class="text-sm-center">
-                <input type="checkbox" [(ngModel)]="selectAllAccessLevel[accessLevel]" (change)="toggleSelectAllResource($event,accessLevel)" value>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let resource of resources">
-              <td>{{resource.name}}</td>
-              <td *ngFor="let accessLevel of accessLevels" class="text-sm-center">
-                <template [ngIf]="isValidPermission(resource, accessLevel)">
-                  <input type="checkbox" [(ngModel)]="permissionGroups[resource.id][accessLevel].selected" (change)="resetSelectAll($event,accessLevel)" value>
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-2">
+      <md-input class="form-control" [(ngModel)]="role.description" placeholder="Description" ngControl="description">
+        <md-hint *ngIf="description.hasError('required') && description.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(loginInfo | async)?.error">
+          <i>{{ (loginInfo | async)?.error | fieldError:'description' }}</i>
+        </md-hint>
+      </md-input>
     </div>
   </div>
-  <div class="row form-group text-center">
-      <div class="col-sm-6 col-lg-4 offset-sm-4 offset-lg-2 text-center">
-        <button type="submit" class="btn btn-primary">Save</button>
+  <div class="row">
+    <div class="col-sm-12 col-lg-8">
+      <table class="md-data-table">
+        <thead>
+          <tr>
+            <th class="md-text-cell">Resource</th>
+            <th class="md-text-cell" *ngFor="let accessLevel of accessLevels">
+              <md-checkbox
+              [(ngModel)]="selectAllAccessLevel[accessLevel]"
+              (change)="toggleSelectAllResource($event,accessLevel)">{{accessLevel}}</md-checkbox>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let resource of resources">
+            <td class="md-text-cell">{{resource.name}}</td>
+            <template ngFor let-accessLevel [ngForOf]="accessLevels">
+              <td class="md-text-cell" *ngIf="isValidPermission(resource, accessLevel)">
+                    <md-checkbox [(ngModel)]="permissionGroups[resource.name][accessLevel].selected"
+                      (change)="resetSelectAll($event,accessLevel)"></md-checkbox>
+               </td>
+               <td class="md-text-cell" *ngIf="!isValidPermission(resource, accessLevel)">
+                    <md-checkbox indeterminate="true" disabled="true"></md-checkbox>
+               </td>
+            </template>
+          </tr>
+          <tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row p-b-2">
+    <div class="col-sm-12 col-lg-8 center-xs">
+      <div class="center-xs">
+         <button type="submit" md-raised-button color="accent">SAVE</button>
       </div>
+    </div>
   </div>
 </form>

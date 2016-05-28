@@ -32,7 +32,7 @@ export class PermissionService extends RestClient {
   }
 
   @GET('/groups')
-  findAllPermissionGroups(): Observable<Map<number, Map<string, Permission>>> {
+  findAllPermissionGroups(): Observable<Map<string, Map<string, Permission>>> {
     return null;
   }
 

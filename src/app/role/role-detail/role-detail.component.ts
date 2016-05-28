@@ -3,19 +3,31 @@ import {
   Router,
   RouteParams, ROUTER_DIRECTIVES
 } from '@angular/router-deprecated';
+
+import {
+  CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators
+} from '@angular/common';
+
 import {Observable} from 'rxjs/Observable';
+
+import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
+import {MdButton} from '@angular2-material/button';
+import {MD_LIST_DIRECTIVES} from '@angular2-material/list/list';
+import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 
 import {RoleService} from '../shared';
 import {PermissionService} from '../shared';
 import {Role, Permission, Resource} from '../../shared/models';
-
+import {PIPES} from '../../shared/pipes/index';
 
 @Component({
   moduleId: module.id,
   selector: 'my-role-detail',
   providers: [RoleService, PermissionService,],
   templateUrl: 'role-detail.component.html',
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, MdCheckbox,
+    MD_LIST_DIRECTIVES, MD_INPUT_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES, MdButton],
+  pipes: [PIPES]
 })
 export class RoleDetailComponent implements OnInit {
   isNew: boolean;
@@ -27,9 +39,14 @@ export class RoleDetailComponent implements OnInit {
     version: 0,
     permissions: new Array<Permission>()
   };
+
+  roleForm: ControlGroup;
+  name: Control;
+  description: Control;
+
   accessLevels: Array<string>;
   resources: Array<Resource>;
-  permissionGroups: Map<number, Map<string, Permission>>;
+  permissionGroups: Map<string, Map<string, Permission>>;
   selectAllAccessLevel: Map<string, boolean> = new Map<string, boolean>();
   errorMessages: Array<string> = new Array();
 
@@ -39,6 +56,16 @@ export class RoleDetailComponent implements OnInit {
     private permissionService: PermissionService,
     private router: Router,
     private routeParams: RouteParams) {
+
+    this.name = new Control('', Validators.compose([Validators.required]));
+    this.description = new Control('', Validators.compose([Validators.required]));
+
+    this.roleForm = new ControlGroup({
+      id: new Control(''),
+      name: this.name,
+      description: this.description,
+      version: new Control('')
+    });
 
     let paramId = this.routeParams.get('id');
     if (typeof paramId === 'undefined' || paramId == 'new') {
@@ -78,8 +105,8 @@ export class RoleDetailComponent implements OnInit {
   isValidPermission(resourceIn: Resource, accessLevel: string): boolean {
     var returnVal = false;
     if (typeof this.permissionGroups !== 'undefined') {
-      if (resourceIn.id in this.permissionGroups) {
-        if (accessLevel in this.permissionGroups[resourceIn.id]) {
+      if (resourceIn.name in this.permissionGroups) {
+        if (accessLevel in this.permissionGroups[resourceIn.name]) {
           returnVal = true;
         }
       }
@@ -88,25 +115,22 @@ export class RoleDetailComponent implements OnInit {
   }
 
   toggleSelectAllResource(event: Event, accessLevel: string) {
-    var selectAll = false;
-    if (event.target['checked']) {
-      selectAll = true;
-    }
+    let selectAll = event;
+
     if (typeof this.permissionGroups === 'undefined' || typeof this.resources === 'undefined') {
       return;
     }
     for (var resource of this.resources) {
-      if (resource.id in this.permissionGroups
-        && accessLevel in this.permissionGroups[resource.id]) {
-        this.permissionGroups[resource.id][accessLevel].selected = selectAll;
+      if (resource.name in this.permissionGroups
+        && accessLevel in this.permissionGroups[resource.name]) {
+        this.permissionGroups[resource.name][accessLevel].selected = selectAll;
       }
     }
   }
 
   resetSelectAll(event: Event, accessLevel: string) {
-    if (!event.target['checked']) {
-      this.selectAllAccessLevel[accessLevel] = false;
-    }
+      this.selectAllAccessLevel[accessLevel] = event;
+
   }
 
   closeErrorMessage(i: number) {
@@ -116,11 +140,11 @@ export class RoleDetailComponent implements OnInit {
   onSubmit() {
     var selectedPerms = new Array<Permission>();
     for (var resource of this.resources) {
-      if (typeof this.permissionGroups !== 'undefined' && resource.id in this.permissionGroups) {
+      if (typeof this.permissionGroups !== 'undefined' && resource.name in this.permissionGroups) {
         for (var accessLevel of this.accessLevels) {
-          if (accessLevel in this.permissionGroups[resource.id] &&
-            this.permissionGroups[resource.id][accessLevel].selected) {
-            selectedPerms.push(this.permissionGroups[resource.id][accessLevel]);
+          if (accessLevel in this.permissionGroups[resource.name] &&
+            this.permissionGroups[resource.name][accessLevel].selected) {
+            selectedPerms.push(this.permissionGroups[resource.name][accessLevel]);
           }
         }
       }
@@ -165,9 +189,9 @@ export class RoleDetailComponent implements OnInit {
     }
     console.log('Updating select status');
     for (var permission of this.role.permissions) {
-      if (permission.resource.id in this.permissionGroups) {
-        if (permission.accessLevel in this.permissionGroups[permission.resource.id]) {
-          this.permissionGroups[permission.resource.id][permission.accessLevel].selected = true;
+      if (permission.resource.name in this.permissionGroups) {
+        if (permission.accessLevel in this.permissionGroups[permission.resource.name]) {
+          this.permissionGroups[permission.resource.name][permission.accessLevel].selected = true;
         }
       }
     }
