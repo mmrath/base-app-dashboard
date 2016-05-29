@@ -11,9 +11,9 @@ import {RoleListComponent} from './role-list';
   directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-  { path: '/', name: 'RoleList', component: RoleListComponent, useAsDefault: true },
-  { path: '/new', name: 'RoleNew', component: RoleDetailComponent, data: { isNew: true } },
-  { path: '/:id', name: 'RoleEdit', component: RoleDetailComponent, data: { isNew: false } }
+  { path: '/', name: 'List', component: RoleListComponent, useAsDefault: true },
+  { path: '/new', name: 'New', component: RoleDetailComponent, data: { isNew: true } },
+  { path: '/:id', name: 'Detail', component: RoleDetailComponent, data: { isNew: false } }
 ])
 export class RoleRootComponent implements OnInit {
   constructor() { }

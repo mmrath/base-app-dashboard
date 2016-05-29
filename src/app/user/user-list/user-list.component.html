@@ -1,0 +1,29 @@
+<div *ngIf="page" class="row">
+  <div class="col-xs-12 col-lg-8">
+    <table class="md-data-table">
+      <thead>
+      <tr>
+        <th class="md-text-cell">Id</th>
+        <th class="md-text-cell">Username</th>
+        <th class="md-text-cell">First Name</th>
+        <th class="md-text-cell">Last Name</th>
+        <th class="md-text-cell">Email</th>
+        <th class="md-text-cell">Enabled</th>
+        <th class="md-text-cell">Lang</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of (page|async)?.content">
+        <td class="md-text-cell"><a [routerLink]="['/User/Detail', {id:row.id }]">{{row.id}}</a></td>
+        <td class="md-text-cell">{{row.username}}</td>
+        <td class="md-text-cell">{{row.firstName}}</td>
+        <td class="md-text-cell">{{row.lastName}}</td>
+        <td class="md-text-cell">{{row.email}}</td>
+        <td class="md-text-cell"><md-checkbox disabled="true" checked="row.enabled"></md-checkbox></td>
+        <td class="md-text-cell">{{row['langKey']}}</td>
+      </tr>
+      <tr>
+      </tbody>
+    </table>
+  </div>
+</div>

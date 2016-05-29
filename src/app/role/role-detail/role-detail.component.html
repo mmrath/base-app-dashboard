@@ -1,19 +1,19 @@
 <form (ngSubmit)="onSubmit()" [ngFormModel]="roleForm">
   <div class="row">
-    <div class="col-sm-12 m-b-1">
+    <div class="col-xs-12 m-b-1">
       <h2 [ngSwitch]="isNew">
         <template [ngSwitchWhen]="true">New Role</template>
         <template ngSwitchDefault>Edit Role</template>
       </h2>
     </div>
-    <div class="col-sm-12" *ngIf="errorMessages">
+    <div class="col-xs-12" *ngIf="errorMessages">
       <div *ngFor="let message of errorMessages">
         {{message}}
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-4 col-lg-2">
+    <div class="col-xs-12 col-md-offset-4 col-md-8 col-lg-4">
       <template [ngIf]="!isNew">
             <input type="hidden" class="form-control" [(ngModel)]="role.id" />
             <input type="hidden" class="form-control" [(ngModel)]="role.version" />
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-4 col-lg-2">
+    <div class="col-xs-12 col-md-offset-4 col-md-8 col-lg-4">
       <md-input class="form-control" [(ngModel)]="role.description" placeholder="Description" ngControl="description">
         <md-hint *ngIf="description.hasError('required') && description.touched">
           <i>Required</i>
@@ -41,7 +41,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-lg-8">
+    <div class="col-xs-12 col-lg-8">
       <table class="md-data-table">
         <thead>
           <tr>
@@ -72,7 +72,7 @@
     </div>
   </div>
   <div class="row p-b-2">
-    <div class="col-sm-12 col-lg-8 center-xs">
+    <div class="col-xs-12 col-md-8 center-xs">
       <div class="center-xs">
          <button type="submit" md-raised-button color="accent">SAVE</button>
       </div>

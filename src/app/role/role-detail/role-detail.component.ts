@@ -160,7 +160,7 @@ export class RoleDetailComponent implements OnInit {
     obsRole.subscribe(
       res => {
         console.log('Success');
-        this.router.navigate(['role']);
+        this.router.navigate(['/Role']);
       },
       err => {
         if (typeof err['_body'] !== 'undefined') {

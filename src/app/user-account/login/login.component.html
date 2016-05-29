@@ -1,4 +1,11 @@
-<div>
+<div *ngIf="(auth|async).token">
+  <div class="row">
+    <div class="col-xs">
+      Already signed in, please <a [routerLink]="['/Signup']">sign out</a> first.
+    </div>
+  </div>
+</div>
+<div *ngIf="!(auth|async).token">
     <div class="row center-xs">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 start-xs">
           <h2>Login</h2>

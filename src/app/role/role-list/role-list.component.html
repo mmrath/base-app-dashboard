@@ -1,3 +1,21 @@
-<p>
-  role-list works!
-</p>
+<div *ngIf="page" class="row">
+  <div class="col-xs-12 col-lg-8">
+    <table class="md-data-table">
+      <thead>
+      <tr>
+        <th class="md-text-cell">Id</th>
+        <th class="md-text-cell">Name</th>
+        <th class="md-text-cell">Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of (page|async)?.content">
+        <td class="md-text-cell"><a [routerLink]="['/Role/Detail', {id:row.id }]">{{row.id}}</a></td>
+        <td class="md-text-cell">{{row.name}}</td>
+        <td class="md-text-cell">{{row.description}}</td>
+      </tr>
+      <tr>
+      </tbody>
+    </table>
+  </div>
+</div>

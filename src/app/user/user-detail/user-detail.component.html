@@ -1,0 +1,73 @@
+<form (ngSubmit)="onSubmit()" [ngFormModel]="userForm">
+  <div class="row">
+    <div class="col-xs-12 m-b-1">
+      <h2 [ngSwitch]="isNew">
+        <template [ngSwitchWhen]="true">New User</template>
+        <template ngSwitchDefault>Edit User</template>
+      </h2>
+    </div>
+    <div class="col-xs-12" *ngIf="errorMessages">
+      <div *ngFor="let message of errorMessages">
+        {{message}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-4">
+      <template [ngIf]="!isNew">
+        <input type="hidden" class="form-control" ngControl="id"/>
+        <input type="hidden" class="form-control" ngControl="version"/>
+      </template>
+      <md-input class="form-control" placeholder="Username" ngControl="username">
+        <md-hint *ngIf="username.hasError('required') && username.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(userInfo | async)?.error">
+          <i>{{ (userInfo | async)?.error }}</i>
+        </md-hint>
+      </md-input>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-4">
+      <md-input class="form-control" placeholder="First Name" ngControl="firstName">
+        <md-hint *ngIf="firstName.hasError('required') && firstName.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(loginInfo | async)?.error">
+          <i>{{ (userInfo | async)?.error }}</i>
+        </md-hint>
+      </md-input>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-4">
+      <md-input class="form-control" placeholder="First Name" ngControl="lastName">
+        <md-hint *ngIf="lastName.hasError('required') && lastName.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(loginInfo | async)?.error">
+          <i>{{ (userInfo | async)?.error }}</i>
+        </md-hint>
+      </md-input>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-4">
+      <md-input class="form-control" placeholder="First Name" ngControl="email">
+        <md-hint *ngIf="email.hasError('required') && email.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="(loginInfo | async)?.error">
+          <i>{{ (userInfo | async)?.error }}</i>
+        </md-hint>
+      </md-input>
+    </div>
+  </div>
+  <div class="row p-b-2">
+    <div class="col-xs-12 col-md-8 left-xs">
+      <button type="submit" md-raised-button color="accent">SAVE</button>
+      <button type="button" md-button color="accent">Cancel</button>
+    </div>
+  </div>
+</form>

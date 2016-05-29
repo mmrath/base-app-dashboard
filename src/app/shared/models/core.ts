@@ -60,6 +60,8 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  enabled?: boolean;
+  langKey?: string;
   version: number;
   roles: Array<Role>;
 }

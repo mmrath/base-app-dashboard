@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
 import {
   CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators
@@ -8,6 +8,7 @@ import {MdButton} from '@angular2-material/button';
 
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 
 import {LoginService} from './login.service';
 import {PIPES} from '../../shared/pipes/index';
@@ -21,8 +22,9 @@ import {PIPES} from '../../shared/pipes/index';
   pipes: [PIPES],
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   auth: Observable<any>;
+  authSubscription: Subscription;
   loginForm: ControlGroup;
 
   username: Control;
@@ -39,9 +41,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.auth = this.store.select('auth');
+    this.authSubscription = this.auth.subscribe(() => {
+      if (this.loginService.isLoggedIn()) {
+        this.router.navigate(['/Home']);
+      }
+    });
     if (!this.loginService.isLoggedIn()) {
       this.loginService.loginStart();
     }
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
   }
 
   login(event) {

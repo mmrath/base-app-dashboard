@@ -3,23 +3,29 @@
     <md-toolbar [routerLink]="['/Home']">
       <h3>Material</h3>
     </md-toolbar>
-
-    <md-nav-list>
-      <a md-list-item [routerLink]="['/Signup']">Button</a>
-      <a md-list-item>Card</a>
+    <md-nav-list *ngIf="loggedIn">
+      <a md-list-item [routerLink]="['/User']">Users</a>
+      <a md-list-item [routerLink]="['/Role']">Roles</a>
+      <a md-list-item >Card</a>
       <a md-list-item>Checkbox</a>
     </md-nav-list>
   </md-sidenav>
   <md-content #content>
     <md-toolbar color="primary" class="fixed-toolbar">
-      <button class="app-hamburger-button" (click)="sidenav.toggle()">
+      <button *ngIf="loggedIn" class="app-hamburger-button" (click)="sidenav.toggle()">
         <i class="material-icons app-toolbar-menu">menu</i>
       </button>
-      <span breakAction="hide">My Application</span>
+      <span breakAction="hide">My Application </span>
       <span class="app-toolbar-filler"></span>
-
+      <template [ngIf]="!(auth|async)?.token">
+        <button md-button [routerLink]="['/Signup']">SIGN UP</button>
+        <button md-button [routerLink]="['/Login']">LOGIN</button>
+      </template>
+      <template [ngIf]="loggedIn">
+        <button md-button>SIGN OUT {{(auth|async)?.user.firstName}}</button>
+      </template>
     </md-toolbar>
-    <div class="container-fluid app-main-content p-a-1">
+    <div class="container-fluid app-main-content m-a-1 p-t-1">
       <router-outlet></router-outlet>
     </div>
   </md-content>

@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Store} from '@ngrx/store';
 
+import 'rxjs/add/operator/take';
+
 import {LOGIN_API} from '../../shared/constants/api';
 import {JSON_HEADERS} from '../../shared/constants/headers';
 import {
@@ -28,5 +30,13 @@ export class LoginService {
 
   loginStart() { this.store.dispatch({type: LOGIN_START}); }
 
-  isLoggedIn(): boolean { return false; }
+  isLoggedIn(): boolean {
+    let loggedIn = false;
+    this.store.select('auth').take(1).subscribe( auth => {
+      if ( typeof auth !== 'undefined' && auth['token'] ) {
+          loggedIn = true;
+      }
+      });
+    return loggedIn;
+  }
 }
