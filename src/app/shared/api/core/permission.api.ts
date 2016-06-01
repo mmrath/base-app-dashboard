@@ -1,19 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {PERMISSION_API} from '../../shared/constants/api';
-import {Permission, Resource} from '../../shared/models';
+import {PERMISSION_API} from '../../constants/api';
+import {Permission, Resource} from '../../models';
 import {Observable} from 'rxjs/Observable';
 import {
-  RestClient, GET, BaseUrl, DefaultHeaders
-} from '../../shared/utils/rest-client';
+  RestClient, GET, BaseUrl
+} from '../../utils/rest-client';
 
 @Injectable()
-@DefaultHeaders({
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-})
 @BaseUrl(PERMISSION_API)
-export class PermissionService extends RestClient {
+export class PermissionApi extends RestClient {
   constructor(http: Http) { super(http); }
 
   @GET()

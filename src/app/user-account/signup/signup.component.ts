@@ -15,7 +15,7 @@ import {PIPES} from '../../shared/pipes/index';
 
 @Component({
   moduleId: module.id,
-  selector: 'my-app-signup',
+  selector: 'app-signup',
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton],
   templateUrl: './signup.component.html',
   providers: [SignupService],
@@ -60,7 +60,6 @@ export class SignupComponent implements OnInit {
   public signup() {
     if (this.signupForm.valid) {
       this.signupService.signup(this.signupForm.value);
-      ;
     }
   }
 }

@@ -59,7 +59,7 @@
             <template ngFor let-accessLevel [ngForOf]="accessLevels">
               <td class="md-text-cell" *ngIf="isValidPermission(resource, accessLevel)">
                     <md-checkbox [(ngModel)]="permissionGroups[resource.name][accessLevel].selected"
-                      (change)="resetSelectAll($event,accessLevel)"></md-checkbox>
+                      (change)="resetSelectAll($event, resource.name, accessLevel)"></md-checkbox>
                </td>
                <td class="md-text-cell" *ngIf="!isValidPermission(resource, accessLevel)">
                     <md-checkbox indeterminate="true" disabled="true"></md-checkbox>

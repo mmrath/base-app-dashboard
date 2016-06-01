@@ -16,7 +16,7 @@ import {PIPES} from '../../shared/pipes/index';
 
 @Component({
   moduleId: module.id,
-  selector: 'my-app-login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   providers: [LoginService],
   pipes: [PIPES],

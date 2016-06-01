@@ -6,10 +6,31 @@
         <template ngSwitchDefault>Edit User</template>
       </h2>
     </div>
-    <div class="col-xs-12" *ngIf="errorMessages">
-      <div *ngFor="let message of errorMessages">
-        {{message}}
-      </div>
+    <div class="col-xs-12" *ngIf="error?.message">
+        {{error.message}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-4 col-lg-2">
+      <md-input class="form-control" placeholder="First Name" ngControl="firstName">
+        <md-hint *ngIf="firstName.hasError('required') && firstName.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="error">
+          <i>{{ error | fieldError:'firstName' }}</i>
+        </md-hint>
+      </md-input>
+    </div>
+    <div class="col-xs-12 col-md-4 col-lg-2">
+      <md-input class="form-control" placeholder="Last Name" ngControl="lastName">
+        <md-hint *ngIf="lastName.hasError('required') && lastName.touched">
+          <i>Required</i>
+        </md-hint>
+        <md-hint *ngIf="error">
+          <i>{{ error | fieldError:'lastName' }}</i>
+        </md-hint>
+      </md-input>
     </div>
   </div>
   <div class="row">
@@ -22,52 +43,45 @@
         <md-hint *ngIf="username.hasError('required') && username.touched">
           <i>Required</i>
         </md-hint>
-        <md-hint *ngIf="(userInfo | async)?.error">
-          <i>{{ (userInfo | async)?.error }}</i>
+        <md-hint *ngIf="error">
+          <i>{{ error | fieldError:'username' }}</i>
         </md-hint>
       </md-input>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-8 col-lg-4">
-      <md-input class="form-control" placeholder="First Name" ngControl="firstName">
-        <md-hint *ngIf="firstName.hasError('required') && firstName.touched">
-          <i>Required</i>
-        </md-hint>
-        <md-hint *ngIf="(loginInfo | async)?.error">
-          <i>{{ (userInfo | async)?.error }}</i>
-        </md-hint>
-      </md-input>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-md-8 col-lg-4">
-      <md-input class="form-control" placeholder="First Name" ngControl="lastName">
-        <md-hint *ngIf="lastName.hasError('required') && lastName.touched">
-          <i>Required</i>
-        </md-hint>
-        <md-hint *ngIf="(loginInfo | async)?.error">
-          <i>{{ (userInfo | async)?.error }}</i>
-        </md-hint>
-      </md-input>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-md-8 col-lg-4">
-      <md-input class="form-control" placeholder="First Name" ngControl="email">
+      <md-input class="form-control" placeholder="Email" ngControl="email">
         <md-hint *ngIf="email.hasError('required') && email.touched">
           <i>Required</i>
         </md-hint>
-        <md-hint *ngIf="(loginInfo | async)?.error">
-          <i>{{ (userInfo | async)?.error }}</i>
+        <md-hint *ngIf="email.hasError('pattern') && email.touched">
+          <i>A valid email is required</i>
+        </md-hint>
+        <md-hint *ngIf="error">
+          <i>{{ error | fieldError:'email' }}</i>
         </md-hint>
       </md-input>
     </div>
   </div>
+
+  <div class="row">
+    <div *ngIf="allRoles" class="col-xs-12 col-md-8 col-lg-4">
+      <h4>Roles</h4>
+      <ul style="list-style: none;">
+        <li *ngFor="let role of allRoles">
+          <md-checkbox md-list-icon [(ngModel)]="selectedRoles[role.id]">
+            {{role.name}} ({{role.description}})
+          </md-checkbox>
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <div class="row p-b-2">
     <div class="col-xs-12 col-md-8 left-xs">
       <button type="submit" md-raised-button color="accent">SAVE</button>
-      <button type="button" md-button color="accent">Cancel</button>
+      <button type="button" md-button>CANCEL</button>
     </div>
   </div>
 </form>

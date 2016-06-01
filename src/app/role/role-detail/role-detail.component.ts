@@ -15,24 +15,24 @@ import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list/list';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 
-import {RoleService} from '../shared';
-import {PermissionService} from '../shared';
+import {RoleApi} from '../../shared/api';
+import {PermissionApi} from '../../shared/api';
 import {Role, Permission, Resource} from '../../shared/models';
 import {PIPES} from '../../shared/pipes/index';
 
 @Component({
   moduleId: module.id,
   selector: 'my-role-detail',
-  providers: [RoleService, PermissionService,],
+  providers: [RoleApi, PermissionApi,],
   templateUrl: 'role-detail.component.html',
   directives: [ROUTER_DIRECTIVES, MdCheckbox,
     MD_LIST_DIRECTIVES, MD_INPUT_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES, MdButton],
   pipes: [PIPES]
 })
 export class RoleDetailComponent implements OnInit {
-  isNew: boolean;
-  id: number;
-  role: Role = {
+  isNew:boolean;
+  id:number;
+  role:Role = {
     id: undefined,
     name: '',
     description: '',
@@ -40,22 +40,21 @@ export class RoleDetailComponent implements OnInit {
     permissions: new Array<Permission>()
   };
 
-  roleForm: ControlGroup;
-  name: Control;
-  description: Control;
+  roleForm:ControlGroup;
+  name:Control;
+  description:Control;
 
-  accessLevels: Array<string>;
-  resources: Array<Resource>;
-  permissionGroups: Map<string, Map<string, Permission>>;
-  selectAllAccessLevel: Map<string, boolean> = new Map<string, boolean>();
-  errorMessages: Array<string> = new Array();
+  accessLevels:Array<string>;
+  resources:Array<Resource>;
+  permissionGroups:Map<string, Map<string, Permission>>;
+  selectAllAccessLevel:Map<string, boolean> = new Map<string, boolean>();
+  errorMessages:Array<string> = new Array();
 
 
-  constructor(
-    private roleService: RoleService,
-    private permissionService: PermissionService,
-    private router: Router,
-    private routeParams: RouteParams) {
+  constructor(private roleService:RoleApi,
+              private permissionService:PermissionApi,
+              private router:Router,
+              private routeParams:RouteParams) {
 
     this.name = new Control('', Validators.compose([Validators.required]));
     this.description = new Control('', Validators.compose([Validators.required]));
@@ -68,7 +67,7 @@ export class RoleDetailComponent implements OnInit {
     });
 
     let paramId = this.routeParams.get('id');
-    if (typeof paramId === 'undefined' || paramId == 'new') {
+    if (typeof paramId === 'undefined' || paramId === 'new' || !paramId) {
       this.isNew = true;
     } else {
       this.isNew = false;
@@ -77,32 +76,38 @@ export class RoleDetailComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  ngOnInit():void {
 
-    var accessLevelsObs = this.permissionService.findAllAccessLevels();
-    var resourcesObs = this.permissionService.findAllResources();
-    var permissionGroupsObs = this.permissionService.findAllPermissionGroups();
+    let accessLevelsObs = this.permissionService.findAllAccessLevels();
+    let resourcesObs = this.permissionService.findAllResources();
+    let permissionGroupsObs = this.permissionService.findAllPermissionGroups();
     accessLevelsObs.subscribe(res => {
       this.accessLevels = res;
     });
     resourcesObs.subscribe(res => {
       this.resources = res;
-    }, err => { console.error('Error ' + err); });
+    }, err => {
+      console.error('Error ' + err);
+    });
     permissionGroupsObs.subscribe(res => {
       this.permissionGroups = res;
       console.log('Got all permissions');
       this.updatePermissionSelectStatus();
-    }, err => { console.error('Error permissionGroups' + err); });
+    }, err => {
+      console.error('Error permissionGroups' + err);
+    });
     if (!this.isNew) {
       this.roleService.findOne(this.id).subscribe(res => {
         console.log('Got role');
         this.role = res;
         this.updatePermissionSelectStatus();
-      }, err => { console.log('Error ' + err); });
+      }, err => {
+        console.log('Error ' + err);
+      });
     }
   }
 
-  isValidPermission(resourceIn: Resource, accessLevel: string): boolean {
+  isValidPermission(resourceIn:Resource, accessLevel:string):boolean {
     var returnVal = false;
     if (typeof this.permissionGroups !== 'undefined') {
       if (resourceIn.name in this.permissionGroups) {
@@ -114,7 +119,7 @@ export class RoleDetailComponent implements OnInit {
     return returnVal;
   }
 
-  toggleSelectAllResource(event: Event, accessLevel: string) {
+  toggleSelectAllResource(event:Event, accessLevel:string) {
     let selectAll = event;
 
     if (typeof this.permissionGroups === 'undefined' || typeof this.resources === 'undefined') {
@@ -128,12 +133,14 @@ export class RoleDetailComponent implements OnInit {
     }
   }
 
-  resetSelectAll(event: Event, accessLevel: string) {
+  resetSelectAll(event:Event, selectedResource:string, accessLevel:string) {
+    if (!event && this.selectAllAccessLevel[accessLevel]) {
       this.selectAllAccessLevel[accessLevel] = event;
 
+    }
   }
 
-  closeErrorMessage(i: number) {
+  closeErrorMessage(i:number) {
     this.errorMessages.splice(i, 1);
   }
 
@@ -151,7 +158,7 @@ export class RoleDetailComponent implements OnInit {
     }
     this.role.permissions = selectedPerms;
     this.errorMessages = new Array<string>();
-    var obsRole: Observable<Role>;
+    var obsRole:Observable<Role>;
     if (this.isNew) {
       obsRole = this.roleService.save(this.role);
     } else {

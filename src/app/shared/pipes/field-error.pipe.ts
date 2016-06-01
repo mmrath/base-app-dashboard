@@ -8,12 +8,23 @@ export class FieldErrorPipe implements PipeTransform {
     }
     if (Array.isArray(value)) {
       let valueArr = value as Array<any>;
-      return valueArr.filter(obj => obj.hasOwnProperty('field') && obj['field'] === fieldName)[0]
-          .message;
-    } else if (
-        value instanceof Object && value.hasOwnProperty('field') && value['field'] === fieldName) {
+      return this.findErrorFromArray(valueArr, fieldName);
+    }else if(Array.isArray(value['fieldErrors'])) {
+      let valueArr = value['fieldErrors'] as Array<any>;
+      return this.findErrorFromArray(valueArr, fieldName);
+    }
+    else if (value instanceof Object && value.hasOwnProperty('field') && value['field'] === fieldName) {
       return value.message;
     }
     return '';
   }
+
+  findErrorFromArray(valueArr:Array<any>, fieldName: string){
+    let error = valueArr.filter(obj => obj.hasOwnProperty('field') && obj['field'] === fieldName)[0];
+    if(error){
+      return error.message;
+    }
+    return null;
+  }
+
 }

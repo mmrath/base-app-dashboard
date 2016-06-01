@@ -229,6 +229,14 @@ function methodBuilder(method: number) {
           }
         }
 
+        if(headers.keys().length === 0){
+          //Since no headers specified, use json by default
+          headers.append('Content-Type', 'application/json');
+
+        }
+
+
+
         let overrideUrl = null;
         if (pUrl) {
           overrideUrl = args[pUrl[0].parameterIndex] + resUrl;
@@ -245,7 +253,7 @@ function methodBuilder(method: number) {
         // make the request and store the observable for later transformation
         let observable: Observable<Response> = this.http.request(req);
 
-        // transform the obserable in accordance to the @Produces decorator
+        // transform the observable in accordance to the @Produces decorator
         if (typeof descriptor.mediaType === 'undefined' ||
             descriptor.mediaType === MediaType.JSON) {
           observable = observable.map(res => res.json());

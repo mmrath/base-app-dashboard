@@ -4,7 +4,7 @@ import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 import {Observable} from 'rxjs/Observable';
 
 
-import {RoleService} from '../shared/role.service';
+import {RoleApi} from '../../shared/api';
 import {Page, Role} from '../../shared/models';
 
 
@@ -14,13 +14,13 @@ import {Page, Role} from '../../shared/models';
   templateUrl: 'role-list.component.html',
   styleUrls: ['role-list.component.css'],
   directives: [ROUTER_DIRECTIVES,MdCheckbox],
-  providers:[RoleService]
+  providers:[RoleApi]
 })
 export class RoleListComponent implements OnInit {
 
   page: Observable<Page<Role>>;
 
-  constructor(private roleService:RoleService) {
+  constructor(private roleService:RoleApi) {
 
   }
 

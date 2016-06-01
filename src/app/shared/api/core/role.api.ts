@@ -1,19 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {ROLE_API} from '../../shared/constants/api';
-import {Role, Page} from '../../shared/models';
+import {ROLE_API} from '../../constants/api';
+import {Role, Page} from '../../models';
 import {Observable} from 'rxjs/Observable';
 import {
-  RestClient, GET, PUT, POST, BaseUrl, DefaultHeaders, Path, Body,
-} from '../../shared/utils/rest-client';
+  RestClient, GET, PUT, POST, BaseUrl, Path, Body,
+} from '../../utils/rest-client';
 
 @Injectable()
-@DefaultHeaders({
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-})
 @BaseUrl(ROLE_API)
-export class RoleService extends RestClient {
+export class RoleApi extends RestClient {
 
   constructor(http: Http) { super(http); }
 

@@ -1,21 +1,19 @@
 <md-sidenav-layout fullscreen>
-  <md-sidenav #sidenav mode="push" class="app-sidenav">
+  <md-sidenav #sidenav mode="side" class="app-sidenav">
     <md-toolbar [routerLink]="['/Home']">
-      <h3>Material</h3>
+      <h3>{{title}}</h3>
     </md-toolbar>
     <md-nav-list *ngIf="loggedIn">
       <a md-list-item [routerLink]="['/User']">Users</a>
       <a md-list-item [routerLink]="['/Role']">Roles</a>
-      <a md-list-item >Card</a>
-      <a md-list-item>Checkbox</a>
     </md-nav-list>
   </md-sidenav>
   <md-content #content>
     <md-toolbar color="primary" class="fixed-toolbar">
-      <button *ngIf="loggedIn" class="app-hamburger-button" (click)="sidenav.toggle()">
-        <i class="material-icons app-toolbar-menu">menu</i>
+      <button md-icon-button *ngIf="loggedIn"  (click)="sidenav.toggle()">
+        <md-icon class="md-24" >menu</md-icon>
       </button>
-      <span breakAction="hide">My Application </span>
+      <span breakAction="hide" *ngIf="!sidenav.opened">{{title}}</span>
       <span class="app-toolbar-filler"></span>
       <template [ngIf]="!(auth|async)?.token">
         <button md-button [routerLink]="['/Signup']">SIGN UP</button>
@@ -25,7 +23,7 @@
         <button md-button>SIGN OUT {{(auth|async)?.user.firstName}}</button>
       </template>
     </md-toolbar>
-    <div class="container-fluid app-main-content m-a-1 p-t-1">
+    <div class="container-fluid app-main-content m-l-1 m-r-1">
       <router-outlet></router-outlet>
     </div>
   </md-content>

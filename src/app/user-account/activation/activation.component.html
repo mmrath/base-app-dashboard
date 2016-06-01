@@ -1,0 +1,19 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Account activation</h1>
+
+      <div class="alert alert-success" *ngIf="(activation | async)?.inProgress" >
+        Activating your account. Please wait.
+      </div>
+      <div class="alert alert-success" *ngIf="(activation | async)?.success" >
+        <strong>Your account has been activated.</strong> Please <a [routerLink]="['/Login']">login</a>.
+        <app-login></app-login>
+      </div>
+      <div class="alert alert-success" *ngIf="!((activation | async)?.error)" >
+        Error activating your account. Please contact support. {{(activation | async)?.error}}
+      </div>
+
+    </div>
+  </div>
+</div>

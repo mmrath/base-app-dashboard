@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {USER_API} from '../../shared/constants/api';
-import {User, Page} from '../../shared/models';
+import {USER_API} from '../../constants/api';
+import {User, Page} from '../../models';
 import {Observable} from 'rxjs/Observable';
 import {
   RestClient, GET, PUT, POST, BaseUrl, DefaultHeaders, Path, Body,
-} from '../../shared/utils/rest-client';
+} from '../../utils/rest-client';
 
 @Injectable()
 @DefaultHeaders({

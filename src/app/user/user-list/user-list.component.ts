@@ -4,7 +4,7 @@ import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 import {Observable} from 'rxjs/Observable';
 
 
-import {UserService} from '../shared/user.service';
+import {UserApi} from '../../shared/api';
 import {Page, User} from '../../shared/models';
 
 
@@ -14,18 +14,18 @@ import {Page, User} from '../../shared/models';
   templateUrl: 'user-list.component.html',
   styleUrls: ['user-list.component.css'],
   directives: [ROUTER_DIRECTIVES,MdCheckbox],
-  providers:[UserService]
+  providers:[UserApi]
 })
 export class UserListComponent implements OnInit {
 
   page: Observable<Page<User>>;
 
-  constructor(private userService:UserService) {
+  constructor(private userApi:UserApi) {
 
   }
 
   ngOnInit() {
-    this.page = this.userService.findAll();
+    this.page = this.userApi.findAll();
   }
 
 }

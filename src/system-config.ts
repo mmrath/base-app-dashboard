@@ -42,7 +42,9 @@ const barrels: string[] = [
   'rxjs', 'ng2-material', '@ngrx/core', '@ngrx/store',
 
   // App specific barrels.
-  'app', 'app/shared', 'app/user-account/signup', 'app/home',
+  'app', 'app/shared', 'app/shared/api',
+  'app/user-account/signup',
+  'app/home',
   'app/role',
   'app/role/shared',
   'app/role/role-detail',

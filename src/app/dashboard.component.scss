@@ -1,10 +1,20 @@
 $app-sidenav-min-width: 250px;
 
-.app-sidenav{
+.app-sidenav {
   min-width: $app-sidenav-min-width;
 }
+
+:host {
+  > md-content {
+    height: inherit;
+  }
+  > md-sidenav-layout {
+    height: 100%;
+  }
+}
+
 .app-sidenav-menu {
-  padding: 10px;
+  padding: 5px;
 }
 
 .app-hamburger-button {
@@ -22,7 +32,7 @@ $app-sidenav-min-width: 250px;
   padding: 0;
   text-align: left;
   text-decoration: none;
-
+  border: 0px;
 }
 
 .app-toolbar-menu {
@@ -33,3 +43,4 @@ $app-sidenav-min-width: 250px;
 .app-toolbar-filler {
   flex: 1 1 auto;
 }
+
