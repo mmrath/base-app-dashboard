@@ -120,7 +120,7 @@ export class RoleDetailComponent implements OnInit {
   }
 
   toggleSelectAllResource(event:Event, accessLevel:string) {
-    let selectAll = event;
+    let selectAll = event['checked'];
 
     if (typeof this.permissionGroups === 'undefined' || typeof this.resources === 'undefined') {
       return;
@@ -134,8 +134,9 @@ export class RoleDetailComponent implements OnInit {
   }
 
   resetSelectAll(event:Event, selectedResource:string, accessLevel:string) {
-    if (!event && this.selectAllAccessLevel[accessLevel]) {
-      this.selectAllAccessLevel[accessLevel] = event;
+    let checked = event['checked'];
+    if (!checked && this.selectAllAccessLevel[accessLevel]) {
+      this.selectAllAccessLevel[accessLevel] = false;
 
     }
   }

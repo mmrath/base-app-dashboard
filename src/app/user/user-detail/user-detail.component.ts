@@ -85,7 +85,7 @@ export class UserDetailComponent implements OnInit {
     if (!this.isNew) {
       this.roleApi.findAll().subscribe(
         res => {
-          this.allRoles = res.content;
+          this.allRoles = res;
           for (let role of this.allRoles) {
             this.selectedRoles[role.id] = false;
           }
@@ -128,15 +128,15 @@ export class UserDetailComponent implements OnInit {
     let user = this.userForm.value;
     user.roles = [];
     for (let role of this.allRoles) {
-      if (this.selectedRoles[role.id] === true) {
+      if (this.selectedRoles[role.id] === true || this.selectedRoles[role.id]['checked']) {
         user.roles.push(role);
       }
     }
     let userObservable;
     if (this.isNew) {
-      userObservable = this.http.post('/api/core/users', JSON.stringify(user));
+      userObservable = this.userApi.save(user);
     } else {
-      userObservable = this.http.put('/api/core/users/'+user.id, JSON.stringify(user));
+      userObservable = this.userApi.update(user.id, user);
     }
     userObservable.subscribe(
       res => {

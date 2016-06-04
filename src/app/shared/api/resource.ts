@@ -1,6 +1,6 @@
 /*
 Copied from https://github.com/Paldom/@angular-rest and the following modified/added
-* Changed name from RESTClient to RestClient
+* Changed name from Resource to Resource
 * Changed URL for method decoration (GET, PUT, POST, DELETE, HEAD) is optional
 * New decorator Url added to parameters, this will replace the BaseUrl
 * JSON response is default, for non JSON use @Produces(MediaType.RAW)
@@ -20,39 +20,10 @@ import {
 import {Observable} from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
+import {Page, PageRequest} from "../models/core";
 
-/*
-* Angular 2 RestClient class.
-*
-* @class RestClient
-* @constructor
-*/
-export class RestClient {
-  public constructor(@Inject(Http) protected http: Http) {}
 
-  protected getBaseUrl(): string { return null; };
 
-  protected getDefaultHeaders(): Object { return null; };
-
-  /**
-   * Request Interceptor
-   *
-   * @method requestInterceptor
-   * @param {Request} req - request object
-   */
-  protected requestInterceptor(req: Request) {
-    //
-  }
-
-  /**
-   * Response Interceptor
-   *
-   * @method responseInterceptor
-   * @param {Response} res - response object
-   * @returns {Response} res - transformed response object
-   */
-  protected responseInterceptor(res: Observable<any>): Observable<any> { return res; }
-}
 
 /**
  * Set the base URL of REST resource
@@ -66,7 +37,7 @@ export function BaseUrl(url: string) {
 }
 
 /**
- * Set default headers for every method of the RestClient
+ * Set default headers for every method of the Resource
  * @param {Object} headers - deafult headers in a key-value pair
  */
 export function DefaultHeaders(headers: any) {
@@ -78,7 +49,7 @@ export function DefaultHeaders(headers: any) {
 
 function paramBuilder(paramName: string) {
   return function(key: string) {
-    return function(target: RestClient, propertyKey: string|symbol, parameterIndex: number) {
+    return function(target: Resource<any>, propertyKey: string|symbol, parameterIndex: number) {
       let metadataKey = `${propertyKey}_${paramName}_parameters`;
       let paramObj: any = {key: key, parameterIndex: parameterIndex};
       if (Array.isArray(target[metadataKey])) {
@@ -106,7 +77,7 @@ export var Path = paramBuilder('Path');
  * Query value of a method's url, type: string
  * @param {string} key - query key to bind value
  */
-export var Query = paramBuilder('Query');
+export var Query = paramBuilder('Query')('query');
 /**
  * Body of a REST method, type: key-value pair object
  * Only one body per method!
@@ -124,7 +95,7 @@ export var Header = paramBuilder('Header');
  * @param {Object} headersDef - custom headers in a key-value pair
  */
 export function Headers(headersDef: any) {
-  return function(target: RestClient, propertyKey: string, descriptor: any) {
+  return function(target: Resource<any>, propertyKey: string, descriptor: any) {
     descriptor.headers = headersDef;
     return descriptor;
   };
@@ -133,11 +104,11 @@ export function Headers(headersDef: any) {
 
 /**
  * Defines the media type(s) that the methods can produce
- * @param MediaType producesDef - mediaType to be parsed
+ * @param responseMediaType  - mediaType to be parsed
  */
-export function Produces(producesDef: MediaType) {
-  return function(target: RestClient, propertyKey: string, descriptor: any) {
-    descriptor.mediaType = producesDef;
+export function Produces(responseMediaType: MediaType) {
+  return function(target: Resource<any>, propertyKey: string, descriptor: any) {
+    descriptor.mediaType = responseMediaType;
     return descriptor;
   };
 }
@@ -148,13 +119,13 @@ export function Produces(producesDef: MediaType) {
  */
 export enum MediaType {
   JSON,
-  RAW  // No transalation
+  RAW,  // No transalation
 }
 
 
 function methodBuilder(method: number) {
   return function(url?: string) {
-    return function(target: RestClient, propertyKey: string, descriptor: any) {
+    return function(target: Resource<any>, propertyKey: string, descriptor: any) {
 
       let pUrl = target[`${propertyKey}_Url_parameters`];
       let pPath = target[`${propertyKey}_Path_parameters`];
@@ -190,23 +161,29 @@ function methodBuilder(method: number) {
           pQuery
               .filter(p => args[p.parameterIndex])  // filter out optional parameters
               .forEach(p => {
-                let key = p.key;
-                let value = args[p.parameterIndex];
-                if (Array.isArray(value)) {
-                  let valueArr = value as Array<any>;
-                  valueArr.forEach(obj => {
-                    let arrParamValue = obj;
-                    if (obj instanceof Object) {
-                      arrParamValue = JSON.stringify(obj);
+                let searchParams = args[p.parameterIndex];
+                for (let key in  searchParams) {
+                    let value:any = searchParams[key];
+
+                    if(value === undefined || value === null){
+                      continue;
                     }
-                    search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
-                  });
-                } else if (value instanceof Object) {  // if the value is a instance of Object, we
-                                                       // stringify it
-                  value = JSON.stringify(value);
-                  search.set(encodeURIComponent(key), encodeURIComponent(value));
-                } else {
-                  search.set(encodeURIComponent(key), encodeURIComponent(value));
+                    if (Array.isArray(value)) {
+                      let valueArr = value as Array<any>;
+                      valueArr.forEach(obj => {
+                        let arrParamValue = obj;
+                        if (obj instanceof Object) {
+                          arrParamValue = JSON.stringify(obj);
+                        }
+                        search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
+                      });
+                    } else if (value instanceof Object) {
+                      // stringify it
+                      value = JSON.stringify(value);
+                      search.set(encodeURIComponent(key), encodeURIComponent(value)); //No append for non arrays
+                    } else {
+                      search.set(encodeURIComponent(key), encodeURIComponent(value)); //No append for non arrays
+                    }
                 }
               });
         }
@@ -264,7 +241,6 @@ function methodBuilder(method: number) {
 
         return observable;
       };
-
       return descriptor;
     };
   };
@@ -279,19 +255,89 @@ export var GET = methodBuilder(RequestMethods.Get);
  * POST method
  * @param {string} url - resource url of the method
  */
-export var POST = methodBuilder(RequestMethods.Post);
+export let POST = methodBuilder(RequestMethods.Post);
 /**
  * PUT method
  * @param {string} url - resource url of the method
  */
-export var PUT = methodBuilder(RequestMethods.Put);
+export let PUT = methodBuilder(RequestMethods.Put);
 /**
  * DELETE method
  * @param {string} url - resource url of the method
  */
-export var DELETE = methodBuilder(RequestMethods.Delete);
-/**
- * HEAD method
- * @param {string} url - resource url of the method
+export let DELETE = methodBuilder(RequestMethods.Delete);
+
+
+/*
+ * Angular 2 Resource class.
+ *
+ * @class Resource
+ * @constructor
  */
-export var HEAD = methodBuilder(RequestMethods.Head);
+export class Resource<T> {
+  public constructor(@Inject(Http) protected http: Http) {}
+
+  protected getBaseUrl(): string { return null; };
+
+  protected getDefaultHeaders(): Object { return null; };
+
+  /**
+   * Request Interceptor
+   *
+   * @method requestInterceptor
+   * @param {Request} req - request object
+   */
+  protected requestInterceptor(req: Request) {
+    //
+  }
+
+  /**
+   * Response Interceptor
+   *
+   * @method responseInterceptor
+   * @param {Response} res - response object
+   * @returns {Response} res - transformed response object
+   */
+  protected responseInterceptor(res: Observable<any>): Observable<any> { return res; }
+
+  @GET('/{id}')
+  findOne( @Path('id') id: any): Observable<T> {
+    return null;
+  }
+
+  @POST()
+  save( @Body body: any): Observable<T> {
+    return null;
+  }
+
+  @PUT('/{id}')
+  update( @Path('id') id: any, @Body body: T): Observable<T> {
+    return null;
+  }
+
+  @DELETE('/{id}')
+  delete( @Path('id') id: any): Observable<T> {
+    return null;
+  }
+
+  /**
+   * Generally used in List windows, this function supports paging ordering and searching
+   * @param pageRequest
+   * @param searchParams
+   * @returns {null}
+     */
+  @GET()
+  find(@Query pageRequest?: PageRequest, @Query searchParams?:any): Observable<Page<T>> {
+    return null;
+  }
+
+  /**
+   * Queries for all records with an assumed limit of 5000 records
+   * @returns an array of objects
+   */
+  findAll() : Observable<T[]> {
+    return this.find({page:0, size:5000 , sort:undefined}).map( page => page.content);
+  }
+
+}
+

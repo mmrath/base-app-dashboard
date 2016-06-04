@@ -21,11 +21,10 @@ export class UserListComponent implements OnInit {
   page: Observable<Page<User>>;
 
   constructor(private userApi:UserApi) {
-
   }
 
   ngOnInit() {
-    this.page = this.userApi.findAll();
+    this.page = this.userApi.find();
   }
 
 }

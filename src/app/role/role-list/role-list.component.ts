@@ -25,7 +25,7 @@ export class RoleListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.page = this.roleService.findAll();
+    this.page = this.roleService.find();
   }
 
 }

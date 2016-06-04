@@ -7,10 +7,10 @@
         Activating your account. Please wait.
       </div>
       <div class="alert alert-success" *ngIf="(activation | async)?.success" >
-        <strong>Your account has been activated.</strong> Please <a [routerLink]="['/Login']">login</a>.
+        Your account has been activated.
         <app-login></app-login>
       </div>
-      <div class="alert alert-success" *ngIf="!((activation | async)?.error)" >
+      <div class="alert alert-success" *ngIf="((activation | async)?.success == false)" >
         Error activating your account. Please contact support. {{(activation | async)?.error}}
       </div>
 

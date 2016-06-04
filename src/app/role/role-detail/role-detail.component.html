@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-md-offset-4 col-md-8 col-lg-4">
+    <div class="col-xs-12 col-md-8 col-lg-4">
       <template [ngIf]="!isNew">
             <input type="hidden" class="form-control" [(ngModel)]="role.id" />
             <input type="hidden" class="form-control" [(ngModel)]="role.version" />
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-md-offset-4 col-md-8 col-lg-4">
+    <div class="col-xs-12 col-md-8 col-lg-4">
       <md-input class="form-control" [(ngModel)]="role.description" placeholder="Description" ngControl="description">
         <md-hint *ngIf="description.hasError('required') && description.touched">
           <i>Required</i>
@@ -58,7 +58,7 @@
             <td class="md-text-cell">{{resource.name}}</td>
             <template ngFor let-accessLevel [ngForOf]="accessLevels">
               <td class="md-text-cell" *ngIf="isValidPermission(resource, accessLevel)">
-                    <md-checkbox [(ngModel)]="permissionGroups[resource.name][accessLevel].selected"
+                    <md-checkbox [checked]="permissionGroups[resource.name][accessLevel].selected"
                       (change)="resetSelectAll($event, resource.name, accessLevel)"></md-checkbox>
                </td>
                <td class="md-text-cell" *ngIf="!isValidPermission(resource, accessLevel)">
@@ -72,9 +72,9 @@
     </div>
   </div>
   <div class="row p-b-2">
-    <div class="col-xs-12 col-md-8 center-xs">
-      <div class="center-xs">
-         <button type="submit" md-raised-button color="accent">SAVE</button>
+    <div class="col-xs-12 col-md-8">
+      <div class="form-control">
+         <button type="submit" class="end-lg" md-raised-button color="accent">SAVE</button>
       </div>
     </div>
   </div>

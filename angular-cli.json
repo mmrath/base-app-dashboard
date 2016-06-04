@@ -26,6 +26,7 @@
     "prefix": "app",
     "sourceDir": "src",
     "styleExt": "css",
-    "prefixInterfaces": false
+    "prefixInterfaces": false,
+    "lazyRoutePrefix": "+"
   }
 }
