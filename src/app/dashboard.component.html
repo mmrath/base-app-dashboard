@@ -3,24 +3,24 @@
     <md-toolbar [routerLink]="['/Home']">
       <h3>{{title}}</h3>
     </md-toolbar>
-    <md-nav-list *ngIf="loggedIn">
+    <md-nav-list *ngIf="(auth|async)?.success">
       <a md-list-item [routerLink]="['/User']">Users</a>
       <a md-list-item [routerLink]="['/Role']">Roles</a>
     </md-nav-list>
   </md-sidenav>
   <md-content #content>
     <md-toolbar color="primary" class="fixed-toolbar">
-      <button md-icon-button *ngIf="loggedIn"  (click)="sidenav.toggle()">
+      <button md-icon-button *ngIf="(auth|async)?.success"  (click)="sidenav.toggle()">
         <md-icon class="md-24" >menu</md-icon>
       </button>
       <span breakAction="hide" *ngIf="!sidenav.opened">{{title}}</span>
       <span class="app-toolbar-filler"></span>
-      <template [ngIf]="!(auth|async)?.token">
+      <template [ngIf]="!(auth|async)?.success">
         <button md-button [routerLink]="['/Signup']">SIGN UP</button>
         <button md-button [routerLink]="['/Login']">LOGIN</button>
       </template>
-      <template [ngIf]="loggedIn">
-        <button md-button>SIGN OUT {{(auth|async)?.user.firstName}}</button>
+      <template [ngIf]="(auth|async)?.success">
+        <button md-button>LOGOUT {{(auth|async)?.user.firstName}}</button>
       </template>
     </md-toolbar>
     <div class="container-fluid app-main-content">

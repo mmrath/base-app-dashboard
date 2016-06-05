@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
-import {RoleDetailComponent} from './role-detail';
-import {RoleListComponent} from './role-list';
+import {RoleDetailComponent} from './role-detail/role-detail.component';
+import {RoleListComponent} from './role-list/role-list.component';
 
 @Component({
   moduleId: module.id,

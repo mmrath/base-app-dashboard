@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
-import {UserDetailComponent} from './user-detail';
-import {UserListComponent} from './user-list';
+import {UserDetailComponent} from './user-detail/user-detail.component';
+import {UserListComponent} from './user-list/user-list.component';
 
 @Component({
   moduleId: module.id,

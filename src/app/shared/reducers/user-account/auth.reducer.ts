@@ -1,7 +1,7 @@
 import {ActionReducer, Action} from '@ngrx/store';
 
 import {Auth} from '../../models';
-import {AUTH_TOKEN_KEY, AUTH_USER_KEY} from '../../constants/index';
+import {AUTH_USER_KEY} from '../../constants/index';
 
 import {
   LOGIN_SUCCCESS, LOGIN_START, LOGOUT_RECEIVED, LOGIN_FAILURE, LOGIN_TOKEN_EXPIRED
@@ -17,23 +17,25 @@ export const authReducer: ActionReducer<any> = (state = initialState, action: Ac
 
   switch (action.type) {
     case LOGIN_SUCCCESS:
-      let tokenReceived = action.payload.id_token;
-      let userReceived = action.payload.user;
-      localStorage.setItem(AUTH_TOKEN_KEY, tokenReceived);
+      let userReceived = action.payload;
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(userReceived));
       return Object.assign(
-        {}, state, { token: tokenReceived, user: userReceived, error: undefined });
+        {}, state, { user: userReceived, error: undefined, success:true });
 
     case LOGIN_START:
     case LOGOUT_RECEIVED:
-      localStorage.removeItem(AUTH_TOKEN_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
       return {};
 
     case LOGIN_FAILURE:
+      localStorage.removeItem(AUTH_USER_KEY);
+      return Object.assign({}, {
+        error: action.payload.error, success:false
+      });
     case LOGIN_TOKEN_EXPIRED:
+      localStorage.removeItem(AUTH_USER_KEY);
       return Object.assign({}, state, {
-        error: action.payload.error, token: undefined, current: undefined
+        error: action.payload.error, expired:true, success:false
       });
 
     case INIT:
@@ -49,7 +51,6 @@ function getStateFromLocalStorage(): any{
   let localUser = localStorage.getItem(AUTH_USER_KEY);
   return Object.assign({}, {
         error: undefined,
-        token: localStorage.getItem(AUTH_TOKEN_KEY),
         user: localUser && JSON.parse(localUser)
       });
 }

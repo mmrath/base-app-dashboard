@@ -9,12 +9,14 @@ import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
+import {AuthApi} from './shared/api/core';
 
 import { RoleRootComponent } from './role';
 import { UserRootComponent } from './user';
 
 import {HomeComponent} from './home/index';
 import {SignupComponent, LoginComponent, ActivationComponent} from './user-account/index';
+import {LOGIN_SUCCCESS, LOGIN_FAILURE} from "./shared/reducers/user-account/actions";
 
 @Component({
   moduleId: module.id,
@@ -22,6 +24,7 @@ import {SignupComponent, LoginComponent, ActivationComponent} from './user-accou
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css'],
   directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar,MdIcon, MD_LIST_DIRECTIVES],
+  providers: [AuthApi]
 })
 @RouteConfig([
   { path: '/', component: HomeComponent, name: 'Home'},
@@ -33,22 +36,18 @@ import {SignupComponent, LoginComponent, ActivationComponent} from './user-accou
 ])
 export class DashboardAppComponent implements OnInit{
   private auth: Observable<any>;
-  private authSubscription: Subscription;
-  loggedIn = false;
   title = "Application";
 
-  constructor(private store: Store<any>) {
+  constructor(private store: Store<any>, private authApi: AuthApi) {
   }
 
   ngOnInit() {
     this.auth = this.store.select('auth');
+    
     this.store.dispatch({ type: 'INIT' });
-    this.authSubscription = this.auth.subscribe(auth => {
-        if ( typeof auth !== 'undefined' && auth['token'] ) {
-          this.loggedIn = true;
-        } else {
-          this.loggedIn = false;
-        }
-    });
+    this.authApi.isAuthentcated().subscribe(
+      response => this.store.dispatch({type: LOGIN_SUCCCESS, payload: response.json()}),
+      error =>  this.store.dispatch({type: LOGIN_FAILURE, payload: {error: error}})
+    )
   }
 }

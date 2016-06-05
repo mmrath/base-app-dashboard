@@ -23,24 +23,24 @@ import {PIPES} from '../../shared/pipes/index';
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  auth: Observable<any>;
-  authSubscription: Subscription;
-  loginForm: ControlGroup;
+  auth:Observable<any>;
+  authSubscription:Subscription;
+  loginForm:ControlGroup;
 
-  username: Control;
-  password: Control;
+  username:Control;
+  password:Control;
 
-  constructor(
-      private store: Store<any>, private router: Router, private loginService: LoginService,
-      private builder: FormBuilder) {
+  constructor(private store:Store<any>, private router:Router, private loginService:LoginService,
+              private builder:FormBuilder) {
     this.username =
-        new Control('', Validators.compose([Validators.required, Validators.minLength(4)]));
+      new Control('', Validators.compose([Validators.required, Validators.minLength(4)]));
     this.password = new Control('', Validators.compose([Validators.required]));
     this.loginForm = builder.group({username: this.username, password: this.password});
   }
 
   ngOnInit() {
     this.auth = this.store.select('auth');
+    
     this.authSubscription = this.auth.subscribe(() => {
       if (this.loginService.isLoggedIn()) {
         this.router.navigate(['/Home']);

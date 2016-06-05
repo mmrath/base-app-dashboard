@@ -54,6 +54,12 @@ export class HttpInterceptor extends Http {
                 options.headers.append('Authorization', 'Bearer ' + idToken);
             }
         }
+        if (!options.headers.has('X-CSRF-TOKEN')) {
+          let xcsrfToken = this.getCookie("CSRF-TOKEN");
+          if (typeof xcsrfToken === 'string') {
+            options.headers.append('X-CSRF-TOKEN', xcsrfToken);
+          }
+        }
         return options;
     }
 
@@ -69,6 +75,12 @@ export class HttpInterceptor extends Http {
             }
         });
     }
+
+  getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
 }
 /*
 bootstrap(MyApp, [

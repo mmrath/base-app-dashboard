@@ -46,18 +46,18 @@ const barrels: string[] = [
   'rxjs', 'ng2-material', '@ngrx/core', '@ngrx/store',
 
   // App specific barrels.
-  'app', 'app/shared', 'app/shared/api',
+  'app', 'app/shared',
+  'app/shared/api',
+  'app/shared/api/core',
+  'app/shared/components',
+  'app/shared/directives',
+  
   'app/user-account/signup',
   'app/home',
   'app/role',
   'app/role/shared',
-  'app/role/role-detail',
-  'app/role/role-list',
   'app/user',
   'app/user/shared',
-  'app/user/user-detail',
-  'app/user/user-list',
-  'app/shared/components',
   /** @cli-barrel */
 ];
 

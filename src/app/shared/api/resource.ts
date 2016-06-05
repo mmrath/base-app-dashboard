@@ -89,6 +89,11 @@ export var Body = paramBuilder('Body')('Body');
  */
 export var Header = paramBuilder('Header');
 
+function getCookie(name){
+  let value = "; " + document.cookie;
+  let parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
 
 /**
  * Set custom headers for a REST method
@@ -209,10 +214,14 @@ function methodBuilder(method: number) {
         if(headers.keys().length === 0){
           //Since no headers specified, use json by default
           headers.append('Content-Type', 'application/json');
-
         }
 
-
+        if (!headers.has('X-CSRF-TOKEN')) {
+          let xcsrfToken = getCookie("CSRF-TOKEN");
+          if (typeof xcsrfToken === 'string') {
+            headers.append('X-CSRF-TOKEN', xcsrfToken);
+          }
+        }
 
         let overrideUrl = null;
         if (pUrl) {
