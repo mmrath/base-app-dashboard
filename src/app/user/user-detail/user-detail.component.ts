@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, ControlArray, Validators
+  CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators
 } from '@angular/common';
 import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
@@ -13,7 +13,7 @@ import {Http} from '@angular/http';
 import {EMAIL_REGEX_PATTERN, NAME_REGEX_PATTERN, USERNAME_REGEX_PATTERN} from '../../shared/constants/index';
 
 import {Store} from '@ngrx/store';
-import {UserApi, RoleApi} from '../../shared/api';
+import {UserApi, RoleApi} from '../../shared/api/core/index';
 import {Role} from "../../shared/models/core";
 
 @Component({

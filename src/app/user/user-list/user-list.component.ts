@@ -3,8 +3,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 import {Observable} from 'rxjs/Observable';
 
-
-import {UserApi} from '../../shared/api';
+import {UserApi} from '../../shared/api/core/index';
 import {Page, User} from '../../shared/models';
 
 

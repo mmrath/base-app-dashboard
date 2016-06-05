@@ -15,8 +15,8 @@ import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list/list';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 
-import {RoleApi} from '../../shared/api';
-import {PermissionApi} from '../../shared/api';
+import {RoleApi} from '../../shared/api/core/index';
+import {PermissionApi} from '../../shared/api/core/index';
 import {Role, Permission, Resource} from '../../shared/models';
 import {PIPES} from '../../shared/pipes/index';
 

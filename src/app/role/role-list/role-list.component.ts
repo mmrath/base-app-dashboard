@@ -4,7 +4,7 @@ import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 import {Observable} from 'rxjs/Observable';
 
 
-import {RoleApi} from '../../shared/api';
+import {RoleApi} from '../../shared/api/core';
 import {Page, Role} from '../../shared/models';
 
 
