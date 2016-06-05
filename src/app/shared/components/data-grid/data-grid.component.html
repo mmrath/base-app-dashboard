@@ -1,0 +1,116 @@
+<template [ngIf]="tableModel" *ngIf="page">
+  <div class="row">
+    <div class="col-xs">
+      <h2>{{tableModel.displayLabel}}</h2>
+    </div>
+  </div>
+  <!--
+  <div class="row">
+    <div class="col-sm-12 form-group">
+      <textarea class="form-control" rows="1" [(ngModel)]="advancedSearchQuery"></textarea>
+    </div>
+    <div class="col-sm-12 form-group">
+      <button type="button" class="btn btn-primary" (click)="advancedSearch($event)">Search</button>
+      <button type="button" class="btn btn-secondary" (click)="advancedSearchQuery=''">Reset</button>
+    </div>
+  </div>
+  -->
+  <div class="row">
+    <md-toolbar color="ascent">
+      <button *ngIf="tableModel.insertable" md-icon-button color="primary" (click)="navigateToNew($event)">
+        <md-icon>add_box</md-icon>
+      </button>
+      <button md-icon-button color="primary" (click)="navigateToNew($event)">
+        <md-icon>archive</md-icon>
+      </button>
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="toolbar-filler"></span>
+
+      <span>
+        <dg-page-size [size]="page.size" [pageSizes]="pageSizes" (pageSizeChanged)="onPageSizeChange($event)">
+        </dg-page-size>
+      </span>
+    </md-toolbar>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="md-data-table">
+        <thead>
+        <tr>
+          <th *ngIf="tableModel.updatable || tableModel.multiSelectable" class="md-text-cell">
+            <button md-icon-button *ngIf="tableModel.updatable" color="primary">
+              <md-icon></md-icon>
+            </button>
+            <template [ngIf]="tableModel.multiSelectable">
+              <input type="checkbox" class="pull-sm-left" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
+            </template>
+          </th>
+          <template ngFor let-col [ngForOf]="tableModel.columns">
+            <th *ngIf="col.showInList" (click)="sort(col)" class="md-text-cell">
+              {{col.displayLabel}}
+              <template [ngIf]="col.sortable">
+                <md-icon>{{getSortClass(col)}}</md-icon>
+              </template>
+            </th>
+          </template>
+          <th *ngIf="tableModel.deletable">
+            <button md-icon-button color="warn">
+              <md-icon></md-icon>
+            </button>
+          </th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <!--
+          <tr>
+            <template [ngIf]="tableModel.multiSelectable">
+              <td></td>
+            </template>
+            <template ngFor let-col [ngForOf]="tableModel.columns">
+              <td *ngIf="col.showInList" class="md-text-cell">
+                <template [ngIf]="col.searchable">
+                  <div class="form-inline" role="form">
+                    <input type="text" class="form-control pull-sm-left m-a-0">
+                      <a href class="btn btn-primary pull-sm-left" role="button" (click)="navigateToNew($event)">
+                      <i class="fa fa-search"></i>
+                    </a>
+                  </div>
+                </template>
+              </td>
+            </template>
+          </tr>
+          -->
+        <tr *ngFor="let row of page.content; let i = index" [ngClass]="{selected:selectedRows[i]}">
+          <td class="md-text-cell">
+            <button md-icon-button color="primary" *ngIf="tableModel.updatable"
+                    [routerLink]="[editLink, {id: row[tableModel.primaryKeyColumn.codeName]}]">
+              <md-icon>edit</md-icon>
+            </button>
+            <input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)">
+          </td>
+
+          <template ngFor let-col [ngForOf]="tableModel.columns">
+            <td *ngIf="col.showInList" class="md-text-cell">{{row[col.codeName]}}</td>
+          </template>
+          <td *ngIf="tableModel.deletable">
+            <button md-icon-button color="warn" (click)="deleteRow(row,$event)">
+              <md-icon>delete_forever</md-icon>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+<div class="row">
+  <div class="col-md-12" *ngIf="page">
+    <dg-pager [number]="page.number" [totalPages]="page.totalPages" [totalElements]="page.totalElements"
+              [size]="page.size" [numberOfElements]="page.numberOfElements" [pageSizes]="pageSizes"
+              (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+    </dg-pager>
+  </div>
+</div>
+<div *ngIf="!tableModel" class="row">Loading grid</div>

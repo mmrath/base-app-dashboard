@@ -4,10 +4,10 @@ import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdIcon} from '@angular2-material/icon';
+import {MdButton} from '@angular2-material/button';
 
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
 
 import {AuthApi} from './shared/api/core';
 
@@ -23,7 +23,7 @@ import {LOGIN_SUCCCESS, LOGIN_FAILURE} from "./shared/reducers/user-account/acti
   selector: 'dashboard-app',
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css'],
-  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar,MdIcon, MD_LIST_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar,MdIcon, MD_LIST_DIRECTIVES, MdButton],
   providers: [AuthApi]
 })
 @RouteConfig([
@@ -43,7 +43,7 @@ export class DashboardAppComponent implements OnInit{
 
   ngOnInit() {
     this.auth = this.store.select('auth');
-    
+
     this.store.dispatch({ type: 'INIT' });
     this.authApi.isAuthentcated().subscribe(
       response => this.store.dispatch({type: LOGIN_SUCCCESS, payload: response.json()}),

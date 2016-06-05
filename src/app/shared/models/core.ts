@@ -65,3 +65,33 @@ export interface User {
   version: number;
   roles: Array<Role>;
 }
+
+
+
+export interface ColumnModel {
+  id?: number;
+  index?: number;
+  codeName?: string;
+  columnName?: string;
+  displayLabel?: string;
+  dataType?: string;
+  columnType?: string;
+  searchable?: boolean;
+  sortable?: boolean;
+  showInList?: boolean;
+  dataTemplate?: string;
+  headerTemplate?: string;
+}
+
+export interface TableModel extends AbsrtactAuditEntity {
+  id: number;
+  codeName: string;
+  tableName: string;
+  displayLabel: string;
+  insertable: boolean;
+  updatable: boolean;
+  deletable: boolean;
+  multiSelectable: boolean;
+  primaryKeyColumn: ColumnModel;
+  columns: Array<ColumnModel>;
+}

@@ -67,7 +67,7 @@ export class HttpInterceptor extends Http {
         return observable.catch((err, source) => {
             if (err.status === 401
                 && typeof err.url !== 'undefined'
-                && !err.url.endsWith('api/authenticate')) {
+                && !err.url.endsWith('api/authentication')) {
                 this.router.navigate(['/Login']);
                 return Observable.empty();
             } else {

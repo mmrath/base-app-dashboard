@@ -26,13 +26,13 @@ if (environment.production) {
 }
 
 bootstrap(DashboardAppComponent, [
-  ...HTTP_PROVIDERS,
-  ...ROUTER_PROVIDERS,
+  HTTP_PROVIDERS,
+  ROUTER_PROVIDERS,
   MdLiveAnnouncer,
-  provide(OVERLAY_CONTAINER_TOKEN, {useValue: createOverlayContainer()}),
+  {provide: OVERLAY_CONTAINER_TOKEN, useValue: createOverlayContainer()},
   MdIconRegistry,
   Renderer,
-  provide(HAMMER_GESTURE_CONFIG, {useClass: MdGestureConfig}),
+  {provide:HAMMER_GESTURE_CONFIG, useClass: MdGestureConfig},
   provideStore(REDUCERS),
   { provide: LocationStrategy, useClass: HashLocationStrategy },
   provide(Http, {

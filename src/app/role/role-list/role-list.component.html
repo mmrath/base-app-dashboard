@@ -1,3 +1,4 @@
+<!--
 <div *ngIf="page" class="row">
   <div class="col-xs-12">
     <table class="md-data-table">
@@ -19,3 +20,8 @@
     </table>
   </div>
 </div>
+-->
+<div *ngIf="tableModel">
+  <data-grid [tableModel]="tableModel" newLink="/Role/New" editLink="/Role/Detail" apiBase="/api/data/role"></data-grid>
+</div>
+<div *ngIf="!tableModel">Loading Role List</div>

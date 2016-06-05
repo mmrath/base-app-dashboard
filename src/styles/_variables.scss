@@ -38,3 +38,7 @@ $headings-color:         inherit !default;
 
 $hr-border-color: rgba(0,0,0,.1) !default;
 $hr-border-width: $border-width !default;
+
+.toolbar-filler {
+  flex: 1 1 auto;
+}

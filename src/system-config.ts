@@ -51,7 +51,8 @@ const barrels: string[] = [
   'app/shared/api/core',
   'app/shared/components',
   'app/shared/directives',
-  
+  'app/shared/services',
+
   'app/user-account/signup',
   'app/home',
   'app/role',
