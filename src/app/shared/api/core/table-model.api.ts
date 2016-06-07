@@ -3,17 +3,17 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 import {
-  Resource, GET, BaseUrl, DefaultHeaders, Query
-} from '../../shared/api/resource';
-import {TableModel} from '../../shared/models';
+  Resource, GET, ResourceConfig, DefaultHeaders, Query
+} from '../resource';
+import {TableModel} from '../../models';
 
 @Injectable()
 @DefaultHeaders({
   'Accept': 'application/json',
   'Content-Type': 'application/json'
 })
-@BaseUrl('/api/table')
-export class TableModelService extends Resource<TableModel> {
+@ResourceConfig({url:'/api/table'})
+export class TableModelApi extends Resource<TableModel> {
 
   constructor(http: Http) {
     super(http);

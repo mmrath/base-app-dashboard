@@ -23,7 +23,7 @@ import {PIPES} from '../../shared/pipes/index';
 @Component({
   moduleId: module.id,
   selector: 'my-role-detail',
-  providers: [RoleApi, PermissionApi,],
+  providers: [],
   templateUrl: 'role-detail.component.html',
   directives: [ROUTER_DIRECTIVES, MdCheckbox,
     MD_LIST_DIRECTIVES, MD_INPUT_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES, MdButton],

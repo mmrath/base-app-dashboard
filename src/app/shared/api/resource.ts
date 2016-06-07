@@ -10,13 +10,14 @@ Copied from https://github.com/Paldom/@angular-rest and the following modified/a
 License: MIT
 */
 
-import {Inject} from '@angular/core';
+import {Inject, provide, Provider} from "@angular/core";
 import {
   Http, Headers as AngularHeaders,
   Request, RequestOptions,
   RequestMethod as RequestMethods,
   Response, URLSearchParams
 } from '@angular/http';
+
 import {Observable} from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
@@ -24,15 +25,22 @@ import {Page, PageRequest} from "../models/core";
 
 
 
-
+export let RESOURCE_PROVIDERS: Provider[] = [];
+export interface ResourceConfigParam {
+  url:string;
+}
 /**
  * Set the base URL of REST resource
  * @param {String} url - base URL
  */
-export function BaseUrl(url: string) {
-  return function<TFunction extends Function>(Target: TFunction): TFunction {
-    Target.prototype.getBaseUrl = function() { return url; };
-    return Target;
+export function ResourceConfig(param: ResourceConfigParam) {
+  return function(Target: { new (http: Http): Resource<any> }){
+    RESOURCE_PROVIDERS.push(provide(Target, {
+      useFactory: (http: Http) => new Target(http),
+      deps: [Http]
+    }));
+    Target.prototype.getBaseUrl = function() { return param.url; };
+    //return Target;
   };
 }
 
@@ -124,7 +132,7 @@ export function Produces(responseMediaType: MediaType) {
  */
 export enum MediaType {
   JSON,
-  RAW,  // No transalation
+  RAW// No transalation
 }
 
 
@@ -168,8 +176,10 @@ function methodBuilder(method: number) {
               .forEach(p => {
                 let searchParams = args[p.parameterIndex];
                 for (let key in  searchParams) {
+                    if(!searchParams.hasOwnProperty(key)){
+                      continue;
+                    }
                     let value:any = searchParams[key];
-
                     if(value === undefined || value === null){
                       continue;
                     }

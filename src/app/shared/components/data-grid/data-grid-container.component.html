@@ -1,0 +1,16 @@
+<div *ngIf="tableModel">
+  <data-grid [tableModel]="tableModel"
+             [newLink]="newLink"
+             [editLink]="editLink"
+             [listApi]="listApi"
+             [deleteApi]="deleteApi"></data-grid>
+</div>
+<div *ngIf="!tableModel">
+  <div *ngIf="error">
+    Error loading list
+  </div>
+  <div *ngIf="!error">
+    Loading list
+  </div>
+</div>
+

@@ -1,53 +1,61 @@
-import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {RouteConfig, Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {Component, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
+
 import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdIcon} from '@angular2-material/icon';
 import {MdButton} from '@angular2-material/button';
 
-import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
-import {AuthApi} from './shared/api/core';
-
-import { RoleRootComponent } from './role';
-import { UserRootComponent } from './user';
+import {RoleRootComponent} from './role';
+import {UserRootComponent} from './user';
 
 import {HomeComponent} from './home/index';
 import {SignupComponent, LoginComponent, ActivationComponent} from './user-account/index';
-import {LOGIN_SUCCCESS, LOGIN_FAILURE} from "./shared/reducers/user-account/actions";
+import {AuthService} from './shared/services/core/auth.service';
+import {TableModelRootComponent} from "./table-model/table-model-root.component";
+import {AuthState} from "./shared/reducers/user-account/auth.reducer";
 
 @Component({
   moduleId: module.id,
   selector: 'dashboard-app',
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.css'],
-  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar,MdIcon, MD_LIST_DIRECTIVES, MdButton],
-  providers: [AuthApi]
+  directives: [ROUTER_DIRECTIVES, MD_SIDENAV_DIRECTIVES, MdToolbar, MdIcon, MD_LIST_DIRECTIVES, MdButton],
+  providers: [AuthService]
 })
 @RouteConfig([
-  { path: '/', component: HomeComponent, name: 'Home'},
-  { path: '/signup', component: SignupComponent, name: 'Signup'},
-  { path: '/login', component: LoginComponent, name: 'Login' },
-  { path: '/role/...', component: RoleRootComponent, name: 'Role' },
-  { path: '/user/...', component: UserRootComponent, name: 'User'},
-  { path: '/activate', component: ActivationComponent, name: 'UserActivation'}
+  {path: '/', component: HomeComponent, name: 'Home'},
+  {path: '/signup', component: SignupComponent, name: 'Signup'},
+  {path: '/login', component: LoginComponent, name: 'Login'},
+  {path: '/role/...', component: RoleRootComponent, name: 'Role'},
+  {path: '/user/...', component: UserRootComponent, name: 'User'},
+  {path: '/activate', component: ActivationComponent, name: 'UserActivation'},
+  {path: '/table/...', component: TableModelRootComponent, name: 'Table'}
 ])
-export class DashboardAppComponent implements OnInit{
-  private auth: Observable<any>;
+export class DashboardAppComponent implements OnInit {
+  private auth:Observable<AuthState>;
   title = "Application";
 
-  constructor(private store: Store<any>, private authApi: AuthApi) {
+  constructor(private router:Router,private location: Location, private authService:AuthService) {
   }
 
   ngOnInit() {
-    this.auth = this.store.select('auth');
-
-    this.store.dispatch({ type: 'INIT' });
-    this.authApi.isAuthentcated().subscribe(
-      response => this.store.dispatch({type: LOGIN_SUCCCESS, payload: response.json()}),
-      error =>  this.store.dispatch({type: LOGIN_FAILURE, payload: {error: error}})
-    )
+    this.auth = this.authService.getAuthState();
+    this.authService.checkAuth();
+    this.auth.subscribe(authState=>{
+      if(!authState.authenticated && !this.authService.isPublicRoute(this.location.path())){
+        this.router.navigate(['/Login']);
+      }
+    })
   }
+
+  logout() {
+    this.authService.logout();
+  }
+
+
 }

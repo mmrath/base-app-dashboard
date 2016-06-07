@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
+import {API_BASE} from "../../constants/api";
+import {ResourceConfig, Resource} from "../resource";
 
 
 @Injectable()
-export class AuthApi {
-
-  constructor(private http: Http) {}
-
-  isAuthentcated():Observable<any>{
+@ResourceConfig({url:API_BASE})
+export class AuthApi extends Resource<any>{
+  
+  checkAuth():Observable<any>{
     return this.http.get("/api/authenticate");
   }
 

@@ -22,11 +22,12 @@ export class DataGridService extends Resource<any> {
                  @Query pageRequest?: PageRequest,
                  @Query search?:any):Observable<any> {
     return null;
-  };
+  }
 
+  @Produces(MediaType.RAW)
   @DELETE('/{id}')
-  public deleteById(@Url('url') url:string, @Path('id') id:string):Observable<any> {
+  public deleteById(@Url('url') url:string, @Path('id') id:any):Observable<any> {
     return null;
-  };
+  }
 
 }

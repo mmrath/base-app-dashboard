@@ -1,5 +1,4 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Http, Headers} from '@angular/http';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {TableModel, ColumnModel, Page, PageRequest, Order} from '../../models/core';
 import {PagerComponent} from './pager.component';
@@ -24,9 +23,10 @@ import 'rxjs/add/operator/map';
 export class DataGridComponent implements OnChanges {
   @Input() tableModel: TableModel;
   @Input() pageSizes: Array<number> = [10, 20, 50, 100, 200];
-  @Input() apiBase: string;
+  @Input() listApi: string;
   @Input() newLink: string;
   @Input() editLink: string; // This must take id as a parameter
+  @Input() deleteApi: string;
   page: Page<any>;
   pageRequest: PageRequest = new PageRequest();
   advancedSearchQuery: string;
@@ -37,7 +37,6 @@ export class DataGridComponent implements OnChanges {
 
   constructor(
     private router: Router,
-    private http: Http,
     private dataGridService: DataGridService
   ) {
     this.pageRequest.size = 10;
@@ -90,8 +89,7 @@ export class DataGridComponent implements OnChanges {
     event.preventDefault();
     let id: number = row[this.tableModel.primaryKeyColumn.codeName];
     console.log('Deleting row:' + JSON.stringify(row));
-    let headers = new Headers();
-    this.http.delete(this.apiBase + '/' + id, { headers: headers }).subscribe(
+    this.dataGridService.deleteById(this.deleteApi, id).subscribe(
       () => {
         if (this.page.numberOfElements === 1 && this.page.number !== 0) {
           this.pageRequest.page = this.pageRequest.page - 1;
@@ -200,7 +198,7 @@ export class DataGridComponent implements OnChanges {
     pageReq.size = this.pageRequest.size;
     pageReq.sort = sortStrings;
 
-    this.dataGridService.getPage(this.apiBase, pageReq, this.search)
+    this.dataGridService.getPage(this.listApi, pageReq, this.search)
       .map((data: Page<any>) => { return data; })
       .subscribe(
       response => {

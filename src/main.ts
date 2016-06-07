@@ -8,9 +8,10 @@ import {Router} from '@angular/router-deprecated';
 
 import {provideStore} from '@ngrx/store';
 
+import {RESOURCE_PROVIDERS} from './app/shared/api';
 import {DashboardAppComponent, environment} from './app/index';
 import {REDUCERS} from './app/shared/reducers/index';
-import {HttpInterceptor} from './app/shared/services/index';
+import {HttpInterceptor} from './app/shared/api/index';
 
 import {OVERLAY_CONTAINER_TOKEN} from '@angular2-material/core/overlay/overlay';
 import {MdLiveAnnouncer} from '@angular2-material/core/live-announcer/live-announcer';
@@ -41,5 +42,6 @@ bootstrap(DashboardAppComponent, [
       requestOptions: RequestOptions,
       router: Router) => new HttpInterceptor(xhrBackend, requestOptions, router),
         deps: [XHRBackend, RequestOptions, Router]
-    })
+    }),
+  RESOURCE_PROVIDERS
 ]);

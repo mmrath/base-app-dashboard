@@ -6,32 +6,31 @@ import {
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
 
-import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
-import {LoginService} from './login.service';
 import {PIPES} from '../../shared/pipes/index';
+import {AuthService} from "../../shared/services/core/auth.service";
+import {AuthState} from "../../shared/reducers/user-account/auth.reducer";
 
 
 @Component({
   moduleId: module.id,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  providers: [LoginService],
+  providers: [AuthService],
   pipes: [PIPES],
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  auth:Observable<any>;
+  auth:Observable<AuthState>;
   authSubscription:Subscription;
   loginForm:ControlGroup;
 
   username:Control;
   password:Control;
 
-  constructor(private store:Store<any>, private router:Router, private loginService:LoginService,
-              private builder:FormBuilder) {
+  constructor(private authService:AuthService,private router:Router, private builder:FormBuilder) {
     this.username =
       new Control('', Validators.compose([Validators.required, Validators.minLength(4)]));
     this.password = new Control('', Validators.compose([Validators.required]));
@@ -39,25 +38,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.auth = this.store.select('auth');
-    
-    this.authSubscription = this.auth.subscribe(() => {
-      if (this.loginService.isLoggedIn()) {
+    this.auth = this.authService.getAuthState();
+    this.authSubscription = this.auth.subscribe( authState => {
+      if (authState.authenticated) {
         this.router.navigate(['/Home']);
       }
     });
-    if (!this.loginService.isLoggedIn()) {
-      this.loginService.loginStart();
-    }
   }
 
   ngOnDestroy() {
     this.authSubscription.unsubscribe();
   }
 
-  login(event) {
+  login() {
+
     if (this.loginForm.valid) {
-      this.loginService.login(this.loginForm.value);
+      this.authService.login(this.loginForm.value);
     }
   }
 }
