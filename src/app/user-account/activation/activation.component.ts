@@ -20,12 +20,9 @@ export class ActivationComponent implements AfterViewInit {
   key: string;
   activation: Observable<any>;
 
-  constructor(private store: Store<any>, private router: Router,
-              private activationService: ActivationService,
-              routeParams: RouteParams) {
+  constructor(private router: Router, private activationService: ActivationService, routeParams: RouteParams) {
     this.key = routeParams.get('key');
-    this.activationService.startActivation(this.key);
-    this.activation = this.store.select('accountActivation');
+    this.activation = this.activationService.getActivationState();
   }
 
   ngAfterViewInit() {

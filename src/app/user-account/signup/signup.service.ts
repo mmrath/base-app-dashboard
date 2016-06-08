@@ -1,30 +1,35 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/let';
 
-import {SIGNUP_API} from '../../shared/constants/api';
-import {
-  SIGNUP_IN_PROGRESS, SIGNUP_SUCCESS, SIGNUP_FAILURE, SIGNUP_START
-} from '../../shared/reducers/user-account/actions';
-import {JSON_HEADERS} from '../../shared/constants/headers';
+import {SignUpActions} from '../../shared/reducers/user-account';
+import {SignUpState} from '../../shared/reducers/user-account';
 
+import {getSignUpState} from '../../shared/reducers';
+import {AccountApi} from '../../shared/api/core/account.api';
 
 @Injectable()
 export class SignupService {
-  constructor(private http: Http, private store: Store<any>) {}
-
-  signup(item: any): void {
-    this.store.dispatch({type: SIGNUP_IN_PROGRESS});
-    this.http.post(SIGNUP_API, JSON.stringify(item), JSON_HEADERS)
-        .subscribe(action => this.store.dispatch({type: SIGNUP_SUCCESS}), err => {
-          let errorBody = undefined;
-          if (typeof err._body !== 'undefined') {
-            errorBody = JSON.parse(err._body);
-          }
-          this.store.dispatch({type: SIGNUP_FAILURE, payload: {error: errorBody}});
-        });
+  constructor(private accountApi:AccountApi, private store:Store<any>) {
   }
 
-  signupStart() { this.store.dispatch({type: SIGNUP_START}); }
+  signup(item:any):void {
+    this.store.dispatch(SignUpActions.signUpInProgress());
+    this.accountApi.signup(item)
+      .subscribe(
+        res => this.store.dispatch(SignUpActions.signUpSuccess(res)),
+        err => this.store.dispatch(SignUpActions.signUpError(err.text()))
+      );
+  }
+
+  signupStart() {
+    this.store.dispatch(SignUpActions.signUpInit());
+  }
+
+  getSignUpState():Observable<SignUpState> {
+    return this.store.let(getSignUpState());
+  }
 }

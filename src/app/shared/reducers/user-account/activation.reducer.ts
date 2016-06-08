@@ -1,32 +1,30 @@
 import {Action, ActionReducer} from '@ngrx/store';
 
-import {
-  USER_ACTIVATION_INIT,
-  USER_ACTIVATION_START,
-  USER_ACTIVATION_SUCCESS,
-  USER_ACTIVATION_ERROR
-} from './actions';
+import {ActivationActions} from './activation.actions';
 
-let initialState:any = {
-  error: undefined,
-  success: undefined,
-  inProgress: undefined
+
+export interface ActivationState {
+  inProgress:boolean;
+  success: boolean;
+  error: any;
+}
+let initialState:ActivationState = {
+  inProgress: null,
+  success: null,
+  error: null
 };
 
-export const activationReducer:ActionReducer<any> = (state = initialState, action:Action = {type: USER_ACTIVATION_INIT}) => {
+export const activationReducer:ActionReducer<any> = (state = initialState, action:Action) => {
 
   switch (action.type) {
-    case USER_ACTIVATION_SUCCESS:
+    case ActivationActions.ACTIVATION_SUCCESS:
       return Object.assign({}, {error: null, success: true, inProgress: false});
 
-    case USER_ACTIVATION_START:
+    case ActivationActions.ACTIVATION_IN_PROGRESS:
       return Object.assign({}, {error: null, success: null, inProgress: true});
 
-    case USER_ACTIVATION_ERROR:
-      return Object.assign({}, {error: action.payload.error, success: false, inProgress: false});
-
-    case USER_ACTIVATION_INIT:
-      return Object.assign({}, initialState);
+    case ActivationActions.ACTIVATION_ERROR:
+      return Object.assign({}, {error: action.payload, success: false, inProgress: false});
 
     default:
       return state;

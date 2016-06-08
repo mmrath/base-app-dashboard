@@ -6,7 +6,7 @@ import {User} from "../../models/core";
 export interface AuthState {
   authenticated:boolean;
   user:User;
-  error:string;
+  error:any;
 }
 
 let initialState:AuthState = {authenticated: false, user: null, error: null};

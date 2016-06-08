@@ -6,7 +6,6 @@ import {
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
 
-import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
 import {EMAIL_REGEX_PATTERN} from '../../shared/constants/index';
@@ -31,8 +30,7 @@ export class SignupComponent implements OnInit {
   email: Control;
   password: Control;
 
-  constructor(
-      private store: Store<any>, private router: Router, private signupService: SignupService,
+  constructor(private router: Router, private signupService: SignupService,
       private builder: FormBuilder) {
     this.firstName =
         new Control('', Validators.compose([Validators.required, Validators.minLength(2)]));
@@ -53,7 +51,7 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.signupInfo = this.store.select('signup');
+    this.signupInfo = this.signupService.getSignUpState();
     this.signupService.signupStart();
   }
 

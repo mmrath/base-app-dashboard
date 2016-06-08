@@ -17,6 +17,7 @@ import {getAuthState} from "../../reducers/index";
 @Injectable()
 export class AuthService {
   constructor(private http:Http, private authApi:AuthApi, private store:Store<any>) {
+    
   }
 
   checkAuth():Subscription {

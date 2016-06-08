@@ -3,20 +3,30 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/let';
 import { Observable } from 'rxjs/Observable';
 
-import {authReducer, AuthState} from './user-account/auth.reducer';
-import {signupReducer} from './user-account/signup.reducer';
-import {activationReducer} from './user-account/activation.reducer';
+import {authReducer, AuthState} from './user-account';
+import {signupReducer, SignUpState} from './user-account';
+import {activationReducer, ActivationState} from './user-account';
 
 export const REDUCERS = {
   auth: authReducer,
-  signup: signupReducer,
-  accountActivation: activationReducer,
+  signUp: signupReducer,
+  userActivation: activationReducer,
 };
 
 export interface AppState {
-  auth: AuthState
+  auth: AuthState,
+  userActivation: ActivationState,
+  signUp: SignUpState
 }
 
 export function getAuthState() {
   return (state: Observable<AppState>) => state.select(s => s.auth);
+}
+
+export function getUserActivationState() {
+  return (state: Observable<AppState>) => state.select(s => s.userActivation);
+}
+
+export function getSignUpState() {
+  return (state: Observable<AppState>) => state.select(s => s.signUp);
 }

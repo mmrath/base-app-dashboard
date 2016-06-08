@@ -153,7 +153,7 @@ export class DataGridComponent implements OnChanges {
           }
         }
       }
-      return 'sort';
+      return 'import_export';
     }
     return 'invisible';
   }
