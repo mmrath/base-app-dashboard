@@ -1,1 +1,1 @@
-export { UserDetailComponent } from './user-detail.component';
+export {UserDetailComponent} from './user-detail.component';

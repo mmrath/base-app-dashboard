@@ -5,9 +5,7 @@ import {User} from '../../models';
 import {Resource, ResourceConfig} from '../resource';
 
 @Injectable()
-@ResourceConfig({url:USER_API})
+@ResourceConfig({url: USER_API})
 export class UserApi extends Resource<User> {
-
   constructor(http: Http) { super(http); }
-
 }

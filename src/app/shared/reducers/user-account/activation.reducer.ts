@@ -1,20 +1,15 @@
 import {Action, ActionReducer} from '@ngrx/store';
-
 import {ActivationActions} from './activation.actions';
 
 
 export interface ActivationState {
-  inProgress:boolean;
+  inProgress: boolean;
   success: boolean;
   error: any;
 }
-let initialState:ActivationState = {
-  inProgress: null,
-  success: null,
-  error: null
-};
+let initialState: ActivationState = {inProgress: null, success: null, error: null};
 
-export const activationReducer:ActionReducer<any> = (state = initialState, action:Action) => {
+export const activationReducer: ActionReducer<any> = (state = initialState, action: Action) => {
 
   switch (action.type) {
     case ActivationActions.ACTIVATION_SUCCESS:

@@ -1,1 +1,1 @@
-export { RoleListComponent } from './role-list.component';
+export {RoleListComponent} from './role-list.component';

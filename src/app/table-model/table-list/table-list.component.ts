@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {DataGridContainerComponent} from '../../shared/components';
 
 
@@ -9,5 +9,4 @@ import {DataGridContainerComponent} from '../../shared/components';
   directives: [DataGridContainerComponent],
 })
 export class TableListComponent {
-
 }

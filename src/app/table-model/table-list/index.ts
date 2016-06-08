@@ -1,1 +1,1 @@
-export { TableListComponent } from './table-list.component';
+export {TableListComponent} from './table-list.component';

@@ -1,6 +1,4 @@
-
 export const SIGNUP_IN_PROGRESS = 'SIGNUP_IN_PROGRESS';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
 export const SIGNUP_START = 'SIGNUP_START';
-

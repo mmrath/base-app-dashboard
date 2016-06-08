@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import {Injectable} from '@angular/core';
+import {Action} from '@ngrx/store';
 
 
 /**
@@ -12,8 +12,8 @@ import { Action } from '@ngrx/store';
  */
 @Injectable()
 export class ActivationActions {
-  
   static ACTIVATION_IN_PROGRESS = '[UA_ACTIVATION] In progress';
+
   static activationInProgress(): Action {
     return {
       type: ActivationActions.ACTIVATION_IN_PROGRESS,
@@ -21,18 +21,14 @@ export class ActivationActions {
   }
 
   static ACTIVATION_SUCCESS = '[UA_ACTIVATION] Success';
+
   static activationSuccess(payload?: any): Action {
-    return {
-      type: ActivationActions.ACTIVATION_SUCCESS,
-      payload: payload
-    };
+    return {type: ActivationActions.ACTIVATION_SUCCESS, payload: payload};
   }
 
   static ACTIVATION_ERROR = '[UA_ACTIVATION] Error';
-  static activationError(error:any): Action {
-    return {
-      type: ActivationActions.ACTIVATION_ERROR,
-      payload: error
-    };
+
+  static activationError(error: any): Action {
+    return {type: ActivationActions.ACTIVATION_ERROR, payload: error};
   }
 }

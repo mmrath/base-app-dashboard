@@ -1,17 +1,16 @@
 import {Action, ActionReducer} from '@ngrx/store';
-
 import {AuthActions} from './auth.actions';
-import {User} from "../../models/core";
+import {User} from '../../models/core';
 
 export interface AuthState {
-  authenticated:boolean;
-  user:User;
-  error:any;
+  authenticated: boolean;
+  user: User;
+  error: any;
 }
 
-let initialState:AuthState = {authenticated: false, user: null, error: null};
+let initialState: AuthState = {authenticated: false, user: null, error: null};
 
-export const authReducer:ActionReducer<AuthState> = (state = initialState, action:Action) => {
+export const authReducer: ActionReducer<AuthState> = (state = initialState, action: Action) => {
 
   switch (action.type) {
     case AuthActions.LOGIN_SUCCESS:
@@ -27,5 +26,3 @@ export const authReducer:ActionReducer<AuthState> = (state = initialState, actio
       return state;
   }
 };
-
-

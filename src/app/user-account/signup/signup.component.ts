@@ -1,13 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
-import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators
-} from '@angular/common';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators} from '@angular/common';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
-
 import {Observable} from 'rxjs/Observable';
-
 import {EMAIL_REGEX_PATTERN} from '../../shared/constants/index';
 import {SignupService} from './signup.service';
 import {PIPES} from '../../shared/pipes/index';
@@ -30,8 +26,8 @@ export class SignupComponent implements OnInit {
   email: Control;
   password: Control;
 
-  constructor(private router: Router, private signupService: SignupService,
-      private builder: FormBuilder) {
+  constructor(
+      private router: Router, private signupService: SignupService, private builder: FormBuilder) {
     this.firstName =
         new Control('', Validators.compose([Validators.required, Validators.minLength(2)]));
     this.lastName = new Control('');

@@ -1,4 +1,4 @@
-$spacer:   1rem !default;
+$spacer: 1rem !default;
 $spacer-x: $spacer !default;
 $spacer-y: $spacer !default;
 $spacers: (
@@ -31,12 +31,12 @@ $font-size-h6: 1rem !default;
 $small-font-size: 80% !default;
 
 $headings-margin-bottom: ($spacer / 2) !default;
-$headings-font-family:   inherit !default;
-$headings-font-weight:   500 !default;
-$headings-line-height:   1.1 !default;
-$headings-color:         inherit !default;
+$headings-font-family: inherit !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.1 !default;
+$headings-color: inherit !default;
 
-$hr-border-color: rgba(0,0,0,.1) !default;
+$hr-border-color: rgba(0, 0, 0, .1) !default;
 $hr-border-width: $border-width !default;
 
 .toolbar-filler {

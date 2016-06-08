@@ -1,8 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { Router, RouterLink, RouteParams } from '@angular/router-deprecated';
-import { CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
-
-import {Store} from '@ngrx/store';
+import {Component, AfterViewInit} from '@angular/core';
+import {Router, RouterLink, RouteParams} from '@angular/router-deprecated';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import {PIPES} from '../../shared/pipes/index';
 import {ActivationService} from './activation.service';
@@ -20,7 +18,9 @@ export class ActivationComponent implements AfterViewInit {
   key: string;
   activation: Observable<any>;
 
-  constructor(private router: Router, private activationService: ActivationService, routeParams: RouteParams) {
+  constructor(
+      private router: Router, private activationService: ActivationService,
+      routeParams: RouteParams) {
     this.key = routeParams.get('key');
     this.activation = this.activationService.getActivationState();
   }
@@ -30,5 +30,4 @@ export class ActivationComponent implements AfterViewInit {
       this.activationService.activate(this.key);
     }
   }
-
 }

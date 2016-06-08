@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-
 import {TableDetailComponent} from './table-detail/table-detail.component';
 import {TableListComponent} from './table-list/table-list.component';
 
@@ -11,15 +10,12 @@ import {TableListComponent} from './table-list/table-list.component';
   directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-  { path: '/', name: 'List', component: TableListComponent, useAsDefault: true },
-  { path: '/new', name: 'New', component: TableDetailComponent, data: { isNew: true } },
-  { path: '/:id', name: 'Detail', component: TableDetailComponent, data: { isNew: false } }
+  {path: '/', name: 'List', component: TableListComponent, useAsDefault: true},
+  {path: '/new', name: 'New', component: TableDetailComponent, data: {isNew: true}},
+  {path: '/:id', name: 'Detail', component: TableDetailComponent, data: {isNew: false}}
 ])
 export class TableModelRootComponent implements OnInit {
-
   constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

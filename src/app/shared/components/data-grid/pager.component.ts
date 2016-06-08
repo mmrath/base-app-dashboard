@@ -1,13 +1,4 @@
-import {
-Component,
-ChangeDetectionStrategy,
-OnChanges,
-SimpleChange,
-Input,
-Output,
-EventEmitter
-} from '@angular/core';
-
+import {Component, ChangeDetectionStrategy, OnChanges, SimpleChange, Input, Output, EventEmitter} from '@angular/core';
 import {MdIcon} from '@angular2-material/icon';
 import {MdButton} from '@angular2-material/button';
 import {MdToolbar} from '@angular2-material/toolbar';
@@ -16,7 +7,7 @@ import {MdToolbar} from '@angular2-material/toolbar';
   moduleId: module.id,
   selector: 'dg-pager',
   templateUrl: 'pager.component.html',
-  directives: [MdButton,MdIcon,MdToolbar],
+  directives: [MdButton, MdIcon, MdToolbar],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PagerComponent implements OnChanges {
@@ -24,12 +15,12 @@ export class PagerComponent implements OnChanges {
   @Input() totalPages: number;
   @Input() totalElements: number;
   @Input() size: number;
-  @Input() number: number; // Page number starts from zero
+  @Input() number: number;  // Page number starts from zero
   @Input() first: boolean;
   @Input() numberOfElements: number;
   @Output() pageChanged: EventEmitter<number> = new EventEmitter<number>();
 
-  pageNumber: number; // Page number starts from 1
+  pageNumber: number;  // Page number starts from 1
   pagerStartIndex: number;
   pagerEndIndex: number;
 
@@ -38,9 +29,7 @@ export class PagerComponent implements OnChanges {
   elementStart: number;
   elementEnd: number;
 
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    this.compute();
-  }
+  ngOnChanges(changes: {[propName: string]: SimpleChange}) { this.compute(); }
 
   selectPage(page: number, event?: MouseEvent) {
     if (event) {

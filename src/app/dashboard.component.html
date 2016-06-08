@@ -10,8 +10,8 @@
   </md-sidenav>
   <md-content #content>
     <md-toolbar color="primary" class="fixed-toolbar">
-      <button md-icon-button *ngIf="(auth|async)?.authenticated"  (click)="sidenav.toggle()">
-        <md-icon class="md-24" >menu</md-icon>
+      <button md-icon-button *ngIf="(auth|async)?.authenticated" (click)="sidenav.toggle()">
+        <md-icon class="md-24">menu</md-icon>
       </button>
       <span breakAction="hide" *ngIf="!sidenav.opened">{{title}}</span>
       <span class="toolbar-filler"></span>

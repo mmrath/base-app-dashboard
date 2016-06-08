@@ -1,18 +1,14 @@
 import {Action, ActionReducer} from '@ngrx/store';
-import {SignUpActions} from "./signup.actions";
+import {SignUpActions} from './signup.actions';
 
 export const INIT = 'INIT';
 
 export interface SignUpState {
-  inProgress:boolean;
+  inProgress: boolean;
   success: boolean;
   error: any;
 }
-let initialState:SignUpState = {
-  inProgress: null,
-  success: null,
-  error: null
-};
+let initialState: SignUpState = {inProgress: null, success: null, error: null};
 
 export const signupReducer: ActionReducer<any> = (state = initialState, action: Action = {
   type: INIT

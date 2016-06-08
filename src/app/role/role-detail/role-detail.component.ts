@@ -1,22 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  Router,
-  RouteParams, ROUTER_DIRECTIVES
-} from '@angular/router-deprecated';
-
-import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators
-} from '@angular/common';
-
+import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
-
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list/list';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
-
-import {RoleApi} from '../../shared/api/core/index';
-import {PermissionApi} from '../../shared/api/core/index';
+import {RoleApi, PermissionApi} from '../../shared/api/core/index';
 import {Role, Permission, Resource} from '../../shared/models';
 import {PIPES} from '../../shared/pipes/index';
 
@@ -25,37 +15,32 @@ import {PIPES} from '../../shared/pipes/index';
   selector: 'my-role-detail',
   providers: [],
   templateUrl: 'role-detail.component.html',
-  directives: [ROUTER_DIRECTIVES, MdCheckbox,
-    MD_LIST_DIRECTIVES, MD_INPUT_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES, MdButton],
+  directives: [
+    ROUTER_DIRECTIVES, MdCheckbox, MD_LIST_DIRECTIVES, MD_INPUT_DIRECTIVES, CORE_DIRECTIVES,
+    FORM_DIRECTIVES, MdButton
+  ],
   pipes: [PIPES]
 })
 export class RoleDetailComponent implements OnInit {
-  isNew:boolean;
-  id:number;
-  role:Role = {
-    id: undefined,
-    name: '',
-    description: '',
-    version: 0,
-    permissions: new Array<Permission>()
-  };
+  isNew: boolean;
+  id: number;
+  role: Role =
+      {id: undefined, name: '', description: '', version: 0, permissions: new Array<Permission>()};
 
-  roleForm:ControlGroup;
-  name:Control;
-  description:Control;
+  roleForm: ControlGroup;
+  name: Control;
+  description: Control;
 
-  accessLevels:Array<string>;
-  resources:Array<Resource>;
-  permissionGroups:Map<string, Map<string, Permission>>;
-  selectAllAccessLevel:Map<string, boolean> = new Map<string, boolean>();
-  errorMessages:Array<string> = new Array();
+  accessLevels: Array<string>;
+  resources: Array<Resource>;
+  permissionGroups: Map<string, Map<string, Permission>>;
+  selectAllAccessLevel: Map<string, boolean> = new Map<string, boolean>();
+  errorMessages: Array<string> = new Array();
 
 
-  constructor(private roleService:RoleApi,
-              private permissionService:PermissionApi,
-              private router:Router,
-              private routeParams:RouteParams) {
-
+  constructor(
+      private roleService: RoleApi, private permissionService: PermissionApi,
+      private router: Router, private routeParams: RouteParams) {
     this.name = new Control('', Validators.compose([Validators.required]));
     this.description = new Control('', Validators.compose([Validators.required]));
 
@@ -73,41 +58,34 @@ export class RoleDetailComponent implements OnInit {
       this.isNew = false;
       this.id = +paramId;
     }
-
   }
 
-  ngOnInit():void {
-
+  ngOnInit(): void {
     let accessLevelsObs = this.permissionService.findAllAccessLevels();
     let resourcesObs = this.permissionService.findAllResources();
     let permissionGroupsObs = this.permissionService.findAllPermissionGroups();
-    accessLevelsObs.subscribe(res => {
-      this.accessLevels = res;
-    });
-    resourcesObs.subscribe(res => {
-      this.resources = res;
-    }, err => {
-      console.error('Error ' + err);
-    });
-    permissionGroupsObs.subscribe(res => {
-      this.permissionGroups = res;
-      console.log('Got all permissions');
-      this.updatePermissionSelectStatus();
-    }, err => {
-      console.error('Error permissionGroups' + err);
-    });
+    accessLevelsObs.subscribe(res => { this.accessLevels = res; });
+    resourcesObs.subscribe(
+        res => { this.resources = res; }, err => { console.error('Error ' + err); });
+    permissionGroupsObs.subscribe(
+        res => {
+          this.permissionGroups = res;
+          console.log('Got all permissions');
+          this.updatePermissionSelectStatus();
+        },
+        err => { console.error('Error permissionGroups' + err); });
     if (!this.isNew) {
-      this.roleService.findOne(this.id).subscribe(res => {
-        console.log('Got role');
-        this.role = res;
-        this.updatePermissionSelectStatus();
-      }, err => {
-        console.log('Error ' + err);
-      });
+      this.roleService.findOne(this.id).subscribe(
+          res => {
+            console.log('Got role');
+            this.role = res;
+            this.updatePermissionSelectStatus();
+          },
+          err => { console.log('Error ' + err); });
     }
   }
 
-  isValidPermission(resourceIn:Resource, accessLevel:string):boolean {
+  isValidPermission(resourceIn: Resource, accessLevel: string): boolean {
     var returnVal = false;
     if (typeof this.permissionGroups !== 'undefined') {
       if (resourceIn.name in this.permissionGroups) {
@@ -119,31 +97,28 @@ export class RoleDetailComponent implements OnInit {
     return returnVal;
   }
 
-  toggleSelectAllResource(event:Event, accessLevel:string) {
+  toggleSelectAllResource(event: Event, accessLevel: string) {
     let selectAll = event['checked'];
 
     if (typeof this.permissionGroups === 'undefined' || typeof this.resources === 'undefined') {
       return;
     }
     for (var resource of this.resources) {
-      if (resource.name in this.permissionGroups
-        && accessLevel in this.permissionGroups[resource.name]) {
+      if (resource.name in this.permissionGroups &&
+          accessLevel in this.permissionGroups[resource.name]) {
         this.permissionGroups[resource.name][accessLevel].selected = selectAll;
       }
     }
   }
 
-  resetSelectAll(event:Event, selectedResource:string, accessLevel:string) {
+  resetSelectAll(event: Event, selectedResource: string, accessLevel: string) {
     let checked = event['checked'];
     if (!checked && this.selectAllAccessLevel[accessLevel]) {
       this.selectAllAccessLevel[accessLevel] = false;
-
     }
   }
 
-  closeErrorMessage(i:number) {
-    this.errorMessages.splice(i, 1);
-  }
+  closeErrorMessage(i: number) { this.errorMessages.splice(i, 1); }
 
   onSubmit() {
     var selectedPerms = new Array<Permission>();
@@ -151,7 +126,7 @@ export class RoleDetailComponent implements OnInit {
       if (typeof this.permissionGroups !== 'undefined' && resource.name in this.permissionGroups) {
         for (var accessLevel of this.accessLevels) {
           if (accessLevel in this.permissionGroups[resource.name] &&
-            this.permissionGroups[resource.name][accessLevel].selected) {
+              this.permissionGroups[resource.name][accessLevel].selected) {
             selectedPerms.push(this.permissionGroups[resource.name][accessLevel]);
           }
         }
@@ -159,39 +134,39 @@ export class RoleDetailComponent implements OnInit {
     }
     this.role.permissions = selectedPerms;
     this.errorMessages = new Array<string>();
-    var obsRole:Observable<Role>;
+    var obsRole: Observable<Role>;
     if (this.isNew) {
       obsRole = this.roleService.save(this.role);
     } else {
       obsRole = this.roleService.update(this.role.id, this.role);
     }
     obsRole.subscribe(
-      res => {
-        console.log('Success');
-        this.router.navigate(['/Role']);
-      },
-      err => {
-        if (typeof err['_body'] !== 'undefined') {
-          var body = JSON.parse(err['_body']);
-          this.errorMessages = new Array();
-          if (typeof body.errors !== 'undefined') {
-            for (let error of body.errors) {
-              this.errorMessages.push(error.message);
+        res => {
+          console.log('Success');
+          this.router.navigate(['/Role']);
+        },
+        err => {
+          if (typeof err['_body'] !== 'undefined') {
+            var body = JSON.parse(err['_body']);
+            this.errorMessages = new Array();
+            if (typeof body.errors !== 'undefined') {
+              for (let error of body.errors) {
+                this.errorMessages.push(error.message);
+              }
+            }
+            if (typeof body.fieldErrors !== 'undefined') {
+              for (let error of body.fieldErrors) {
+                this.errorMessages.push(error.message);
+              }
             }
           }
-          if (typeof body.fieldErrors !== 'undefined') {
-            for (let error of body.fieldErrors) {
-              this.errorMessages.push(error.message);
-            }
-          }
-        }
-        console.log('Error' + err);
-      });
+          console.log('Error' + err);
+        });
   }
 
   private updatePermissionSelectStatus() {
-    if (typeof this.permissionGroups === 'undefined'
-      || typeof this.role.permissions === 'undefined') {
+    if (typeof this.permissionGroups === 'undefined' ||
+        typeof this.role.permissions === 'undefined') {
       console.log('Not updating select status');
       return;
     }

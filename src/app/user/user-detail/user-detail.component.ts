@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators
-} from '@angular/common';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators} from '@angular/common';
 import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
@@ -9,55 +7,55 @@ import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
 import {PIPES} from '../../shared/pipes/index';
 import {Http} from '@angular/http';
-
 import {EMAIL_REGEX_PATTERN, NAME_REGEX_PATTERN, USERNAME_REGEX_PATTERN} from '../../shared/constants/index';
-
 import {Store} from '@ngrx/store';
 import {UserApi, RoleApi} from '../../shared/api/core/index';
-import {Role} from "../../shared/models/core";
+import {Role} from '../../shared/models/core';
 
 @Component({
   moduleId: module.id,
   selector: 'my-app-user-detail',
   templateUrl: 'user-detail.component.html',
   styleUrls: ['user-detail.component.css'],
-  directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES,
-    MD_INPUT_DIRECTIVES, MD_LIST_DIRECTIVES, MdCheckbox, MdButton],
+  directives: [
+    ROUTER_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MD_LIST_DIRECTIVES,
+    MdCheckbox, MdButton
+  ],
   providers: [UserApi, RoleApi],
   pipes: [PIPES]
 })
 export class UserDetailComponent implements OnInit {
-  error:any;
-  isNew:boolean;
-  userForm:ControlGroup;
+  error: any;
+  isNew: boolean;
+  userForm: ControlGroup;
 
-  allRoles:Array<Role>;
+  allRoles: Array<Role>;
 
-  selectedRoles:Map<number, boolean>;
+  selectedRoles: Map<number, boolean>;
 
-  id:Control;
-  username:Control;
-  firstName:Control;
-  lastName:Control;
-  email:Control;
-  enabled:Control;
-  version:Control;
+  id: Control;
+  username: Control;
+  firstName: Control;
+  lastName: Control;
+  email: Control;
+  enabled: Control;
+  version: Control;
 
-  constructor(private store:Store<any>, private userApi:UserApi, private roleApi:RoleApi,
-              private http:Http,
-              private router:Router,
-              private routeParams:RouteParams) {
-
+  constructor(
+      private store: Store<any>, private userApi: UserApi, private roleApi: RoleApi,
+      private http: Http, private router: Router, private routeParams: RouteParams) {
     this.selectedRoles = new Map<number, boolean>();
     ;
 
     this.id = new Control('');
-    this.username = new Control('',
-      Validators.compose([Validators.required, Validators.pattern(USERNAME_REGEX_PATTERN)]));
-    this.firstName = new Control('',
-      Validators.compose([Validators.required, Validators.pattern(NAME_REGEX_PATTERN), Validators.minLength(2)]));
+    this.username = new Control(
+        '', Validators.compose([Validators.required, Validators.pattern(USERNAME_REGEX_PATTERN)]));
+    this.firstName = new Control('', Validators.compose([
+      Validators.required, Validators.pattern(NAME_REGEX_PATTERN), Validators.minLength(2)
+    ]));
     this.lastName = new Control('', Validators.pattern(NAME_REGEX_PATTERN));
-    this.email = new Control('', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEX_PATTERN)]));
+    this.email = new Control(
+        '', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEX_PATTERN)]));
     this.enabled = new Control('');
     this.version = new Control('');
 
@@ -74,7 +72,6 @@ export class UserDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-
     let paramId = this.routeParams.get('id');
     if (typeof paramId === 'undefined' || paramId == 'new' || !paramId) {
       this.isNew = true;
@@ -84,39 +81,37 @@ export class UserDetailComponent implements OnInit {
 
     if (!this.isNew) {
       this.roleApi.findAll().subscribe(
-        res => {
-          this.allRoles = res;
-          for (let role of this.allRoles) {
-            this.selectedRoles[role.id] = false;
-          }
-        },
-        err => {
-          this.error = err;
-          console.error(err);
-        }
-      );
+          res => {
+            this.allRoles = res;
+            for (let role of this.allRoles) {
+              this.selectedRoles[role.id] = false;
+            }
+          },
+          err => {
+            this.error = err;
+            console.error(err);
+          });
 
       this.userApi.findOne(+paramId).subscribe(
-        res => {
-          this.id.updateValue(res.id);
-          this.username.updateValue(res.username);
-          this.firstName.updateValue(res.username);
-          this.lastName.updateValue(res.lastName);
-          this.email.updateValue(res.email);
-          this.enabled.updateValue(res.enabled);
-          this.version.updateValue(res.version);
-          let control: Control = <Control>this.userForm.find('langKey');
-          control.updateValue(res.langKey);
+          res => {
+            this.id.updateValue(res.id);
+            this.username.updateValue(res.username);
+            this.firstName.updateValue(res.username);
+            this.lastName.updateValue(res.lastName);
+            this.email.updateValue(res.email);
+            this.enabled.updateValue(res.enabled);
+            this.version.updateValue(res.version);
+            let control: Control = <Control>this.userForm.find('langKey');
+            control.updateValue(res.langKey);
 
-          for (let role of res.roles) {
-            this.selectedRoles[role.id] = true;
-          }
-        },
-        err => {
-          this.error = err;
-          console.error(err);
-        }
-      );
+            for (let role of res.roles) {
+              this.selectedRoles[role.id] = true;
+            }
+          },
+          err => {
+            this.error = err;
+            console.error(err);
+          });
     }
   }
 
@@ -139,18 +134,14 @@ export class UserDetailComponent implements OnInit {
       userObservable = this.userApi.update(user.id, user);
     }
     userObservable.subscribe(
-      res => {
-        this.router.navigate(['/User']);
-      },
-      err => {
-        if (err._body) {
-          this.error = JSON.parse(err._body);
-        } else {
-          this.error = err;
-        }
-        console.log('Error');
-      }
-    );
+        res => { this.router.navigate(['/User']); },
+        err => {
+          if (err._body) {
+            this.error = JSON.parse(err._body);
+          } else {
+            this.error = err;
+          }
+          console.log('Error');
+        });
   }
-
 }

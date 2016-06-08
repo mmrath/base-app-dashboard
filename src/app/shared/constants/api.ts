@@ -9,4 +9,3 @@ export const ACCOUNT_ACTIVATE_API = API_BASE + '/activate';
 export const USER_API = API_BASE + '/core/users';
 export const ROLE_API = API_BASE + '/core/roles';
 export const PERMISSION_API = API_BASE + '/core/permissions';
-

@@ -3,14 +3,14 @@
     <div class="col-xs-12">
       <h1>Account activation</h1>
 
-      <div class="alert alert-success" *ngIf="(activation | async)?.inProgress" >
+      <div class="alert alert-success" *ngIf="(activation | async)?.inProgress">
         Activating your account. Please wait.
       </div>
-      <div class="alert alert-success" *ngIf="(activation | async)?.success" >
+      <div class="alert alert-success" *ngIf="(activation | async)?.success">
         Your account has been activated.
         <app-login></app-login>
       </div>
-      <div class="alert alert-success" *ngIf="((activation | async)?.success == false)" >
+      <div class="alert alert-success" *ngIf="((activation | async)?.success == false)">
         Error activating your account. Please contact support. {{(activation | async)?.error}}
       </div>
 

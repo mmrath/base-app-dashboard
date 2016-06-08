@@ -8,9 +8,9 @@ const map: any = {
   'angualr2-jwt': 'vendor/angular2-jwt'
 };
 
-const packages:any = {};
+const packages: any = {};
 
-const materialPkgs:string[] = [
+const materialPkgs: string[] = [
   'button',
   'card',
   'checkbox',
@@ -26,11 +26,7 @@ const materialPkgs:string[] = [
   'toolbar',
 ];
 
-materialPkgs.forEach((pkg) => {
-  packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`};
-});
-
-
+materialPkgs.forEach((pkg) => { packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`}; });
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,24 +42,13 @@ const barrels: string[] = [
   'rxjs', 'ng2-material', '@ngrx/core', '@ngrx/store',
 
   // App specific barrels.
-  'app', 'app/shared',
-  'app/shared/api',
-  'app/shared/api/core',
-  'app/shared/components',
-  'app/shared/directives',
-  'app/shared/services',
+  'app', 'app/shared', 'app/shared/api', 'app/shared/api/core', 'app/shared/components',
+  'app/shared/directives', 'app/shared/services',
 
-  'app/shared/reducers',
-  'app/shared/reducers/user-account',
+  'app/shared/reducers', 'app/shared/reducers/user-account',
 
-  'app/user-account/signup',
-  'app/home',
-  'app/role',
-  'app/role/shared',
-  'app/user',
-  'app/user/shared',
-  'app/table-model/table-list',
-  'app/table-model/table-detail',
+  'app/user-account/signup', 'app/home', 'app/role', 'app/role/shared', 'app/user',
+  'app/user/shared', 'app/table-model/table-list', 'app/table-model/table-detail',
   /** @cli-barrel */
 ];
 

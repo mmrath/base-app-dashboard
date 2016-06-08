@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import {Injectable} from '@angular/core';
+import {Action} from '@ngrx/store';
 
 
 /**
@@ -12,28 +12,19 @@ import { Action } from '@ngrx/store';
  */
 @Injectable()
 export class AuthActions {
-
   static LOGIN_SUCCESS = '[AUTH] Login success';
+
   static loginSuccess(user: any): Action {
-    return {
-      type: AuthActions.LOGIN_SUCCESS,
-      payload: user
-    };
+    return {type: AuthActions.LOGIN_SUCCESS, payload: user};
   }
 
   static LOGIN_FAILED = '[AUTH] Login failed';
+
   static loginFailed(error: any): Action {
-    return {
-      type: AuthActions.LOGIN_FAILED,
-      payload: error
-    };
+    return {type: AuthActions.LOGIN_FAILED, payload: error};
   }
 
   static LOGOUT_SUCCESS = '[AUTH] Logout success';
-  static logoutSuccess(): Action {
-    return {
-      type: AuthActions.LOGOUT_SUCCESS,
-      payload: null
-    };
-  }
+
+  static logoutSuccess(): Action { return {type: AuthActions.LOGOUT_SUCCESS, payload: null}; }
 }

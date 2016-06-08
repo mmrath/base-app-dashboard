@@ -20,7 +20,7 @@ export class PageSizeComponent implements OnChanges {
 
   @Output() private pageSizeChanged: EventEmitter<number> = new EventEmitter<number>();
 
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+  ngOnChanges(changes: {[propName: string]: SimpleChange}) {
     if (typeof this.size === 'undefined' || typeof this.pageSizes === 'undefined') {
       return;
     }

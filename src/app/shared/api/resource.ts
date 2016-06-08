@@ -1,46 +1,34 @@
 /*
-Copied from https://github.com/Paldom/@angular-rest and the following modified/added
-* Changed name from Resource to Resource
-* Changed URL for method decoration (GET, PUT, POST, DELETE, HEAD) is optional
-* New decorator Url added to parameters, this will replace the BaseUrl
-* JSON response is default, for non JSON use @Produces(MediaType.RAW)
-* Handle array parameters correctly
+ Copied from https://github.com/Paldom/@angular-rest and the following modified/added
+ * Changed name from Resource to Resource
+ * Changed URL for method decoration (GET, PUT, POST, DELETE, HEAD) is optional
+ * New decorator Url added to parameters, this will replace the BaseUrl
+ * JSON response is default, for non JSON use @Produces(MediaType.RAW)
+ * Handle array parameters correctly
 
-@angular-rest (c) Domonkos Pal
-License: MIT
-*/
+ @angular-rest (c) Domonkos Pal
+ License: MIT
+ */
 
-import {Inject, provide, Provider} from "@angular/core";
-import {
-  Http, Headers as AngularHeaders,
-  Request, RequestOptions,
-  RequestMethod as RequestMethods,
-  Response, URLSearchParams
-} from '@angular/http';
-
+import {Inject, provide, Provider} from '@angular/core';
+import {Http, Headers as AngularHeaders, Request, RequestOptions, RequestMethod as RequestMethods, Response, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-
 import 'rxjs/add/operator/map';
-import {Page, PageRequest} from "../models/core";
-
+import {Page, PageRequest} from '../models/core';
 
 
 export let RESOURCE_PROVIDERS: Provider[] = [];
-export interface ResourceConfigParam {
-  url:string;
-}
+export interface ResourceConfigParam { url: string; }
 /**
  * Set the base URL of REST resource
  * @param {String} url - base URL
  */
 export function ResourceConfig(param: ResourceConfigParam) {
-  return function(Target: { new (http: Http): Resource<any> }){
-    RESOURCE_PROVIDERS.push(provide(Target, {
-      useFactory: (http: Http) => new Target(http),
-      deps: [Http]
-    }));
+  return function(Target: {new (http: Http): Resource<any>}) {
+    RESOURCE_PROVIDERS.push(
+        provide(Target, {useFactory: (http: Http) => new Target(http), deps: [Http]}));
     Target.prototype.getBaseUrl = function() { return param.url; };
-    //return Target;
+    // return Target;
   };
 }
 
@@ -97,10 +85,10 @@ export var Body = paramBuilder('Body')('Body');
  */
 export var Header = paramBuilder('Header');
 
-function getCookie(name){
-  let value = "; " + document.cookie;
-  let parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
+function getCookie(name) {
+  let value = '; ' + document.cookie;
+  let parts = value.split('; ' + name + '=');
+  if (parts.length == 2) return parts.pop().split(';').shift();
 }
 
 /**
@@ -132,7 +120,7 @@ export function Produces(responseMediaType: MediaType) {
  */
 export enum MediaType {
   JSON,
-  RAW// No transalation
+  RAW  // No transalation
 }
 
 
@@ -175,30 +163,34 @@ function methodBuilder(method: number) {
               .filter(p => args[p.parameterIndex])  // filter out optional parameters
               .forEach(p => {
                 let searchParams = args[p.parameterIndex];
-                for (let key in  searchParams) {
-                    if(!searchParams.hasOwnProperty(key)){
-                      continue;
-                    }
-                    let value:any = searchParams[key];
-                    if(value === undefined || value === null){
-                      continue;
-                    }
-                    if (Array.isArray(value)) {
-                      let valueArr = value as Array<any>;
-                      valueArr.forEach(obj => {
-                        let arrParamValue = obj;
-                        if (obj instanceof Object) {
-                          arrParamValue = JSON.stringify(obj);
-                        }
-                        search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
-                      });
-                    } else if (value instanceof Object) {
-                      // stringify it
-                      value = JSON.stringify(value);
-                      search.set(encodeURIComponent(key), encodeURIComponent(value)); //No append for non arrays
-                    } else {
-                      search.set(encodeURIComponent(key), encodeURIComponent(value)); //No append for non arrays
-                    }
+                for (let key in searchParams) {
+                  if (!searchParams.hasOwnProperty(key)) {
+                    continue;
+                  }
+                  let value: any = searchParams[key];
+                  if (value === undefined || value === null) {
+                    continue;
+                  }
+                  if (Array.isArray(value)) {
+                    let valueArr = value as Array<any>;
+                    valueArr.forEach(obj => {
+                      let arrParamValue = obj;
+                      if (obj instanceof Object) {
+                        arrParamValue = JSON.stringify(obj);
+                      }
+                      search.append(encodeURIComponent(key), encodeURIComponent(arrParamValue));
+                    });
+                  } else if (value instanceof Object) {
+                    // stringify it
+                    value = JSON.stringify(value);
+                    search.set(
+                        encodeURIComponent(key),
+                        encodeURIComponent(value));  // No append for non arrays
+                  } else {
+                    search.set(
+                        encodeURIComponent(key),
+                        encodeURIComponent(value));  // No append for non arrays
+                  }
                 }
               });
         }
@@ -221,13 +213,13 @@ function methodBuilder(method: number) {
           }
         }
 
-        if(headers.keys().length === 0){
-          //Since no headers specified, use json by default
+        if (headers.keys().length === 0) {
+          // Since no headers specified, use json by default
           headers.append('Content-Type', 'application/json');
         }
 
         if (!headers.has('X-CSRF-TOKEN')) {
-          let xcsrfToken = getCookie("CSRF-TOKEN");
+          let xcsrfToken = getCookie('CSRF-TOKEN');
           if (typeof xcsrfToken === 'string') {
             headers.append('X-CSRF-TOKEN', xcsrfToken);
           }
@@ -320,22 +312,16 @@ export class Resource<T> {
   protected responseInterceptor(res: Observable<any>): Observable<any> { return res; }
 
   @GET('/{id}')
-  findOne( @Path('id') id: any): Observable<T> {
-    return null;
-  }
+  findOne(@Path('id') id: any): Observable<T> { return null; }
 
   @POST()
-  save( @Body body: any): Observable<T> {
-    return null;
-  }
+  save(@Body body: any): Observable<T> { return null; }
 
   @PUT('/{id}')
-  update( @Path('id') id: any, @Body body: T): Observable<T> {
-    return null;
-  }
+  update(@Path('id') id: any, @Body body: T): Observable<T> { return null; }
 
   @DELETE('/{id}')
-  delete( @Path('id') id: any): Observable<T> {
+  delete (@Path('id') id: any): Observable<T> {
     return null;
   }
 
@@ -344,9 +330,9 @@ export class Resource<T> {
    * @param pageRequest
    * @param searchParams
    * @returns {null}
-     */
+   */
   @GET()
-  find(@Query pageRequest?: PageRequest, @Query searchParams?:any): Observable<Page<T>> {
+  find(@Query pageRequest?: PageRequest, @Query searchParams?: any): Observable<Page<T>> {
     return null;
   }
 
@@ -354,9 +340,7 @@ export class Resource<T> {
    * Queries for all records with an assumed limit of 5000 records
    * @returns an array of objects
    */
-  findAll() : Observable<T[]> {
-    return this.find({page:0, size:5000 , sort:undefined}).map( page => page.content);
+  findAll(): Observable<T[]> {
+    return this.find({page: 0, size: 5000, sort: undefined}).map(page => page.content);
   }
-
 }
-
