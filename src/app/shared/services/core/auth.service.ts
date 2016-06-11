@@ -32,7 +32,9 @@ export class AuthService {
         .subscribe(response => {
           this.store.dispatch(AuthActions.loginSuccess(response));
           this.checkAuth();
-        }, err => this.store.dispatch(AuthActions.loginFailed(err.text())));
+        }, err => {
+          this.store.dispatch(AuthActions.loginFailed(err.text()))
+        });
   }
 
   logout(): Subscription {
@@ -44,7 +46,7 @@ export class AuthService {
             },
             err => {
               this.checkAuth();
-              this.store.dispatch(AuthActions.logoutSuccess())
+              this.store.dispatch(AuthActions.logoutSuccess());
             });
   }
 
@@ -52,8 +54,10 @@ export class AuthService {
 
   isPublicRoute(path: string): boolean {
     console.log('Path is:' + path);
-    if (path === undefined || path === null) return false;
+    if (path === undefined || path === null) {
+      return false;
+    }
     return path.endsWith('/login') || path.endsWith('/signup') || path.endsWith('/reset') ||
-        path.endsWith('/activate')
+        path.endsWith('/activate');
   }
 }

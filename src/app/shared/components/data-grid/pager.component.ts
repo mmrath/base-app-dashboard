@@ -1,4 +1,6 @@
-import {Component, ChangeDetectionStrategy, OnChanges, SimpleChange, Input, Output, EventEmitter} from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, OnChanges, SimpleChange, Input, Output, EventEmitter
+} from '@angular/core';
 import {MdIcon} from '@angular2-material/icon';
 import {MdButton} from '@angular2-material/button';
 import {MdToolbar} from '@angular2-material/toolbar';

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Router, ActivatedRoute,  ROUTER_DIRECTIVES} from '@angular/router';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
@@ -40,7 +40,7 @@ export class RoleDetailComponent implements OnInit {
 
   constructor(
       private roleService: RoleApi, private permissionService: PermissionApi,
-      private router: Router, private routeParams: RouteParams) {
+      private route: ActivatedRoute, private router: Router) {
     this.name = new Control('', Validators.compose([Validators.required]));
     this.description = new Control('', Validators.compose([Validators.required]));
 
@@ -50,17 +50,16 @@ export class RoleDetailComponent implements OnInit {
       description: this.description,
       version: new Control('')
     });
+  }
 
-    let paramId = this.routeParams.get('id');
+  ngOnInit(): void {
+    let paramId = this.route.snapshot.params['id'];
     if (typeof paramId === 'undefined' || paramId === 'new' || !paramId) {
       this.isNew = true;
     } else {
       this.isNew = false;
       this.id = +paramId;
     }
-  }
-
-  ngOnInit(): void {
     let accessLevelsObs = this.permissionService.findAllAccessLevels();
     let resourcesObs = this.permissionService.findAllResources();
     let permissionGroupsObs = this.permissionService.findAllPermissionGroups();
@@ -143,7 +142,7 @@ export class RoleDetailComponent implements OnInit {
     obsRole.subscribe(
         res => {
           console.log('Success');
-          this.router.navigate(['/Role']);
+          this.router.navigate(['/role']);
         },
         err => {
           if (typeof err['_body'] !== 'undefined') {

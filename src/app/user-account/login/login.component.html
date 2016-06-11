@@ -1,7 +1,7 @@
 <div *ngIf="(auth|async).token">
   <div class="row">
     <div class="col-xs">
-      Already signed in, please <a [routerLink]="['/Signup']">sign out</a> first.
+      Already signed in, please <a [routerLink]="['/signup']">sign out</a> first.
     </div>
   </div>
 </div>
@@ -39,11 +39,11 @@
       </div>
     </div>
 
-    <div class="row center-xs p-t-1 p-b-2">
+    <div class="row center-xs p-b-2">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="w-100 start-xs">
           <button md-raised-button [ngClass]="{'disabled' : !loginForm.valid }" color="accent">LOGIN</button>
-          <button md-button [routerLink]="['/Signup']">SIGN UP</button>
+          <button md-button (click)="router.navigate(['/signup'])">SIGN UP</button>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import {Http} from '@angular/http';
 import {Injectable} from '@angular/core';
-import {Resource, GET, DELETE, DefaultHeaders, Path, Query, Url, Produces, MediaType} from '../../api/resource';
+import {
+  Resource, GET, DELETE, DefaultHeaders, Path, Query, Url, Produces, MediaType
+} from '../../api/resource';
 import {Observable} from 'rxjs/Observable';
 import {PageRequest} from '../../models/core';
 

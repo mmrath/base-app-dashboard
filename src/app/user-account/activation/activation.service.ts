@@ -20,8 +20,12 @@ export class ActivationService {
       this.store.dispatch(ActivationActions.activationInProgress());
       this.accountApi.activateAccount({key: key})
           .subscribe(
-              res => {this.store.dispatch(ActivationActions.activationSuccess(res))},
-              err => { this.store.dispatch(ActivationActions.activationError(err.text())); });
+              res => {
+                this.store.dispatch(ActivationActions.activationSuccess(res));
+              },
+              err => {
+                this.store.dispatch(ActivationActions.activationError(err.text()));
+              });
     } else {
       key = undefined;
       this.store.dispatch(

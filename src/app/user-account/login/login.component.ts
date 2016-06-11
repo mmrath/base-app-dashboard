@@ -1,6 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
-import {CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators} from '@angular/common';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {
+  CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators
+} from '@angular/common';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
 import {Observable} from 'rxjs/Observable';
@@ -16,7 +18,7 @@ import {AuthState} from '../../shared/reducers/user-account/auth.reducer';
   templateUrl: './login.component.html',
   providers: [AuthService],
   pipes: [PIPES],
-  directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
+  directives: [ROUTER_DIRECTIVES,  CORE_DIRECTIVES, FORM_DIRECTIVES, MD_INPUT_DIRECTIVES, MdButton]
 })
 export class LoginComponent implements OnInit,
     OnDestroy {
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit,
     this.auth = this.authService.getAuthState();
     this.authSubscription = this.auth.subscribe(authState => {
       if (authState.authenticated) {
-        this.router.navigate(['/Home']);
+        this.router.navigate(['/home']);
       }
     });
   }

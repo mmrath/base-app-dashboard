@@ -11,23 +11,31 @@
  */
 
 import {Inject, provide, Provider} from '@angular/core';
-import {Http, Headers as AngularHeaders, Request, RequestOptions, RequestMethod as RequestMethods, Response, URLSearchParams} from '@angular/http';
+import {
+  Http,
+  Headers as AngularHeaders,
+  Request,
+  RequestOptions,
+  RequestMethod as RequestMethods,
+  Response,
+  URLSearchParams
+} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Page, PageRequest} from '../models/core';
 
 
-export let RESOURCE_PROVIDERS: Provider[] = [];
+export const RESOURCE_PROVIDERS: Provider[] = [];
 export interface ResourceConfigParam { url: string; }
 /**
  * Set the base URL of REST resource
  * @param {String} url - base URL
  */
 export function ResourceConfig(param: ResourceConfigParam) {
-  return function(Target: {new (http: Http): Resource<any>}) {
+  return function(target: {new (http: Http): Resource<any>}) {
     RESOURCE_PROVIDERS.push(
-        provide(Target, {useFactory: (http: Http) => new Target(http), deps: [Http]}));
-    Target.prototype.getBaseUrl = function() { return param.url; };
+        provide(target, {useFactory: (http: Http) => new target(http), deps: [Http]}));
+    target.prototype.getBaseUrl = function() { return param.url; };
     // return Target;
   };
 }
@@ -37,9 +45,9 @@ export function ResourceConfig(param: ResourceConfigParam) {
  * @param {Object} headers - deafult headers in a key-value pair
  */
 export function DefaultHeaders(headers: any) {
-  return function<TFunction extends Function>(Target: TFunction): TFunction {
-    Target.prototype.getDefaultHeaders = function() { return headers; };
-    return Target;
+  return function<TFunction extends Function>(target: TFunction): TFunction {
+    target.prototype.getDefaultHeaders = function() { return headers; };
+    return target;
   };
 }
 
@@ -88,7 +96,9 @@ export var Header = paramBuilder('Header');
 function getCookie(name) {
   let value = '; ' + document.cookie;
   let parts = value.split('; ' + name + '=');
-  if (parts.length == 2) return parts.pop().split(';').shift();
+  if (parts.length == 2) {
+    return parts.pop().split(';').shift();
+  }
 }
 
 /**
@@ -199,16 +209,16 @@ function methodBuilder(method: number) {
         // set class default headers
         let headers = new AngularHeaders(this.getDefaultHeaders());
         // set method specific headers
-        for (let k in descriptor.headers) {
-          if (descriptor.headers.hasOwnProperty(k)) {
-            headers.append(k, descriptor.headers[k]);
+        for (let key in descriptor.headers) {
+          if (descriptor.headers.hasOwnProperty(key)) {
+            headers.append(key, descriptor.headers[key]);
           }
         }
         // set parameter specific headers
         if (pHeader) {
-          for (let k in pHeader) {
-            if (pHeader.hasOwnProperty(k)) {
-              headers.append(pHeader[k].key, args[pHeader[k].parameterIndex]);
+          for (let key1 in pHeader) {
+            if (pHeader.hasOwnProperty(key1)) {
+              headers.append(pHeader[key1].key, args[pHeader[key1].parameterIndex]);
             }
           }
         }

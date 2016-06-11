@@ -1,5 +1,7 @@
-import {Http, Request, RequestOptionsArgs, Response, RequestOptions, ConnectionBackend, Headers} from '@angular/http';
-import {Router} from '@angular/router-deprecated';
+import {
+  Http, Request, RequestOptionsArgs, Response, RequestOptions, ConnectionBackend, Headers
+} from '@angular/http';
+import {Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/empty';
@@ -60,7 +62,7 @@ export class HttpInterceptor extends Http {
     return observable.catch((err, source) => {
       if (err.status === 401 && typeof err.url !== 'undefined' &&
           !err.url.endsWith('api/authentication')) {
-        this.router.navigate(['/Login']);
+        this.router.navigate(['/login']);
         return Observable.empty();
       } else {
         return Observable.throw(err);
@@ -71,19 +73,8 @@ export class HttpInterceptor extends Http {
   getCookie(name) {
     let value = '; ' + document.cookie;
     let parts = value.split('; ' + name + '=');
-    if (parts.length == 2) return parts.pop().split(';').shift();
+    if (parts.length == 2) {
+      return parts.pop().split(';').shift();
+    }
   }
 }
-/*
- bootstrap(MyApp, [
- HTTP_PROVIDERS,
- ROUTER_PROVIDERS,
- provide(LocationStrategy, { useClass: HashLocationStrategy }),
- provide(Http, {
- useFactory: (xhrBackend: XHRBackend, requestOptions: RequestOptions, router: Router) => new
- HttpInterceptor(xhrBackend, requestOptions, router),
- deps: [XHRBackend, RequestOptions, Router]
- })
- ])
- .catch(err => console.error(err));
- */

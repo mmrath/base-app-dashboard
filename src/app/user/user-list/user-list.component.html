@@ -14,7 +14,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of (page|async)?.content">
-        <td class="md-text-cell"><a [routerLink]="['/User/Detail', {id:row.id }]">{{row.id}}</a></td>
+        <td class="md-text-cell"><a [routerLink]="['/user/edit', row.id ]">{{row.id}}</a></td>
         <td class="md-text-cell">{{row.username}}</td>
         <td class="md-text-cell">{{row.firstName}}</td>
         <td class="md-text-cell">{{row.lastName}}</td>

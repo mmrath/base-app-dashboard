@@ -1,14 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators} from '@angular/common';
-import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {
+  CORE_DIRECTIVES, FORM_DIRECTIVES, Control, ControlGroup, Validators
+} from '@angular/common';
+import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from '@angular/router';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdCheckbox} from '@angular2-material/checkbox/checkbox';
-import {PIPES} from '../../shared/pipes/index';
-import {Http} from '@angular/http';
-import {EMAIL_REGEX_PATTERN, NAME_REGEX_PATTERN, USERNAME_REGEX_PATTERN} from '../../shared/constants/index';
 import {Store} from '@ngrx/store';
+import {Http} from '@angular/http';
+
+import {PIPES} from '../../shared/pipes/index';
+import {
+  EMAIL_REGEX_PATTERN, NAME_REGEX_PATTERN, USERNAME_REGEX_PATTERN
+} from '../../shared/constants/index';
 import {UserApi, RoleApi} from '../../shared/api/core/index';
 import {Role} from '../../shared/models/core';
 
@@ -41,9 +46,9 @@ export class UserDetailComponent implements OnInit {
   enabled: Control;
   version: Control;
 
-  constructor(
+  constructor(private route: ActivatedRoute,
       private store: Store<any>, private userApi: UserApi, private roleApi: RoleApi,
-      private http: Http, private router: Router, private routeParams: RouteParams) {
+      private http: Http, private router: Router) {
     this.selectedRoles = new Map<number, boolean>();
     ;
 
@@ -72,8 +77,8 @@ export class UserDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    let paramId = this.routeParams.get('id');
-    if (typeof paramId === 'undefined' || paramId == 'new' || !paramId) {
+    let paramId = this.route.snapshot.params['id'];
+    if (typeof paramId === 'undefined' || paramId === 'new' || !paramId) {
       this.isNew = true;
     } else {
       this.isNew = false;
@@ -134,7 +139,7 @@ export class UserDetailComponent implements OnInit {
       userObservable = this.userApi.update(user.id, user);
     }
     userObservable.subscribe(
-        res => { this.router.navigate(['/User']); },
+        res => { this.router.navigate(['/user']); },
         err => {
           if (err._body) {
             this.error = JSON.parse(err._body);

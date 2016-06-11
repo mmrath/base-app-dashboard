@@ -47,8 +47,10 @@ const barrels: string[] = [
 
   'app/shared/reducers', 'app/shared/reducers/user-account',
 
-  'app/user-account/signup', 'app/home', 'app/role', 'app/role/shared', 'app/user',
-  'app/user/shared', 'app/table-model/table-list', 'app/table-model/table-detail',
+  'app/user-account',
+  'app/user-account/signup',
+  'app/home', 'app/role', 'app/role/shared', 'app/user',
+  'app/user/shared', 'app/table-model', 'app/table-model/table-list', 'app/table-model/table-detail',
   /** @cli-barrel */
 ];
 

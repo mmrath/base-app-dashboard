@@ -85,7 +85,7 @@
         <tr *ngFor="let row of page.content; let i = index" [ngClass]="{selected:selectedRows[i]}">
           <td class="md-text-cell">
             <button md-icon-button color="primary" *ngIf="tableModel.updatable"
-                    [routerLink]="[editLink, {id: row[tableModel.primaryKeyColumn.codeName]}]">
+                    (click)="router.navigate([editLink, row[tableModel.primaryKeyColumn.codeName]])">
               <md-icon>edit</md-icon>
             </button>
             <input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)">

@@ -1,13 +1,15 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-import {TableModel, ColumnModel, Page, PageRequest, Order} from '../../models/core';
-import {PagerComponent} from './pager.component';
-import {PageSizeComponent} from './page-size.component';
-import {DataGridService} from './data-grid.service';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+
 import {MdIcon} from '@angular2-material/icon';
 import {MdButton} from '@angular2-material/button';
 import {MdToolbar} from '@angular2-material/toolbar';
 import 'rxjs/add/operator/map';
+
+import {TableModel, ColumnModel, Page, PageRequest, Order} from '../../models/core';
+import {PagerComponent} from './pager.component';
+import {PageSizeComponent} from './page-size.component';
+import {DataGridService} from './data-grid.service';
 
 @Component({
   moduleId: module.id,

@@ -1,11 +1,11 @@
 <md-sidenav-layout fullscreen>
   <md-sidenav #sidenav mode="side" class="app-sidenav">
-    <md-toolbar [routerLink]="['/Home']">
+    <md-toolbar [routerLink]="['/home']">
       <h3>{{title}}</h3>
     </md-toolbar>
     <md-nav-list *ngIf="(auth|async)?.authenticated">
-      <a md-list-item [routerLink]="['/User']">Users</a>
-      <a md-list-item [routerLink]="['/Role']">Roles</a>
+      <a md-list-item [routerLink]="['/user']">Users</a>
+      <a md-list-item [routerLink]="['/role']">Roles</a>
     </md-nav-list>
   </md-sidenav>
   <md-content #content>
@@ -16,8 +16,8 @@
       <span breakAction="hide" *ngIf="!sidenav.opened">{{title}}</span>
       <span class="toolbar-filler"></span>
       <template [ngIf]="!(auth|async)?.authenticated">
-        <button md-button [routerLink]="['/Signup']">SIGN UP</button>
-        <button md-button [routerLink]="['/Login']">LOGIN</button>
+        <button md-button (click)="router.navigate(['/signup'])">SIGN UP</button>
+        <button md-button (click)="router.navigate(['/login'])">LOGIN</button>
       </template>
       <template [ngIf]="(auth|async)?.authenticated">
         <button md-button (click)="logout()">LOGOUT {{(auth|async)?.user.firstName}}</button>
